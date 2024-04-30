@@ -1,0 +1,37 @@
+{if $GLOBALS['config']['app']['copyright_status'] eq 2}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Thông báo hệ thống......</title>
+{include file="block/include"}
+</head>
+<body>
+{include file="block/head"}
+<div class="mac_msg_jump">
+  <div class="msg_jump_tit">Thông báo hệ thống...</div>
+  <div class="title">Người dùng thân mến：</div>
+  <div class="text">《{$obj['vod_name']}》{$GLOBALS['config']['app']['copyright_notice']|default='Do vấn đề bản quyền, trang web này không cung cấp chức năng phát video'}</div>
+  <div class="jump"> {if condition="$obj['vod_jumpurl'] neq ''"}Tự động trang <a id="href" href="{$obj['vod_jumpurl']}">nhảy</a> Thời gian chờ： <b id="wait">3</b>&nbsp;&nbsp;Giây{/if}</div>
+</div>
+{include file="block/foot"}
+{if !empty($obj.vod_jumpurl)}
+<script type="text/javascript">
+(function(){
+  var wait = document.getElementById('wait'), href = '{$obj.vod_jumpurl}';
+  var interval = setInterval(function(){
+    var time = --wait.innerHTML;
+    if(time <= 0) {
+      top.location.href = href;
+      clearInterval(interval);
+    };
+  }, 1000);
+})();
+</script>
+{/if}
+</body>
+</html>
+{elseif $GLOBALS['config']['app']['copyright_status'] eq 3/}
+{include file="vod/play"}
+{elseif $GLOBALS['config']['app']['copyright_status'] eq 4/}
+{include file="vod/player"}
+{/if}

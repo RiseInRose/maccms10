@@ -1,0 +1,23 @@
+<div class="vod-detail-pic col-md-wide-25 col-xs-wide-35 p-xs-0"><a class="vod-detail-thumb lazyload" href="{$obj|mac_url_vod_play}" data-original="{$obj.vod_pic|mac_url_img}"></a></div>
+      <div class="col-md-wide-75 col-xs-wide-65 vod-detail-info pt-xs-0 pb-xs-0">
+        <ul class="img-list clearfix">
+          <li class="col-xs-1">
+            <h1 {if !empty($obj.vod_color)} style="color:#{$obj.vod_color};"{/if}>{$obj.vod_name}</h1>
+          </li>
+          {if !empty($obj.vod_sub)}
+          <li class="col-sm-1 text-overflow hidden-xs"><span class="text-ccc text-overflow">Bí danh：</span>{$obj.vod_sub} </li>
+          {/if}
+          <li class="col-md-1 text-overflow"><span class="text-ccc">Diễn viên chính：</span>{$obj.vod_actor|mac_url_create='actor','vod','search','&nbsp;'}</li>
+          <li class="col-sm-2 col-xs-1"><span class="text-ccc">Trạng thái：</span>{if condition="($obj.type.type_id == 1) || ($obj.type_id_1 == 1) "}{$obj.vod_remarks|default='Chất lượng cao'}{else/}{notempty name="obj.vod_remarks"}{$obj.vod_remarks}{elseif condition="!empty($obj.vod_serial)"/}Cập nhật đến tập{$obj.vod_serial}集{else/}Toàn bộ series{/notempty}{/if}</li>
+          <li class="col-sm-2 col-xs-1"><span class="text-ccc">Đạo diễn：</span>{$obj.vod_director|default='Chưa được nhập'}</li>
+          <li class="col-sm-2 col-xs-1 text-overflow"><span class="text-ccc">Loại：</span>{if !empty($obj.vod_class)}{maccms:foreach name=":explode(',',$obj.vod_class)" id="class" key="key_class"}<a href="{:mac_url_type($obj.type,['class'=>$class],show)}" target="_blank">{$class}</a>{/maccms:foreach}{else/}Chưa được nhập{/if}</li>
+          <li class="col-md-2 col-sm-2 col-xs-1 text-overflow hidden-xs"><span class="text-ccc">Ngôn ngữ：</span>{$obj.vod_lang|default='Chưa được nhập'}</li>
+          <li class="col-md-2 col-sm-2 col-xs-2 text-overflow hidden-xs"><span class="text-ccc">Khu vực：</span>{$obj.vod_area|default='Chưa được nhập'}</li>
+          <li class="col-sm-2 col-xs-2 text-overflow hidden-xs"><span class="text-ccc">Thập kỷ：</span>{$obj.vod_year|default='Chưa được nhập'}</li>
+          <li class="col-sm-2 col-xs-1 text-overflow hidden-xs"><span class="text-ccc">Cập nhật：</span>{$obj.vod_time|mac_day}</li>
+          <li class="col-md-1 col-sm-1 col-xs-1 detail-info">
+            <p class="txt-hidden one pointer"><span class="text-ccc">Giới thiệu：</span>{$obj.vod_content|mac_filter_html}</p>
+            <div class="text-center text-ccc slidedown pointer"><span class="iconfont icon-down"></span></div>
+          </li>
+        </ul>
+      </div>

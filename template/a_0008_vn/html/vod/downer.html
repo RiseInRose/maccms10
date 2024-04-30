@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<title>Trình phát iframe</title>
+{include file="block/include"}
+<style>
+* {
+  word-wrap: break-word;
+  outline: none
+}
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  color: #fff;
+}
+</style>
+</head>
+<body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
+{$player_data}
+{$player_js}
+{if condition="$popedom.code gt 1"/}
+<div class="player_showtry" style="display:none;">
+  <div class="player_box">
+    <div class="player_popeom ewave-player-popedom"> {if condition="$obj.vod_points_down eq 0"}
+      <p>Xem thử{$popedom.trysee}Phút kết thúc, để xem bộ phim này một cách đầy đủ cần phải nâng cấp thành viên, vui lòng nâng cấp sau khi xem。</p>
+      <small>Gợi ý：Mua nhóm thành viên VIP, tận hưởng quyền lợi đặc biệt, cảm ơn vì đã hỗ trợ。</small>
+      <p><a href="{:mac_url('user/index')}" target="_blank">Trung tâm thành viên</a> <a href="{:mac_url('user/upgrade')}" target="_blank">马上升级</a></p>
+      {else/}
+      <p>Xem thử{$popedom.trysee}Phút kết thúc, để xem bộ phim này một cách đầy đủ cần chi phí{$obj.vod_points_down}Điểm，Vui lòng thanh toán trước khi xem。</p>
+      <small>Gợi ý：Thanh toán một lần, xem mãi mãi, không trừ phí lặp lại, cảm ơn sự hỗ trợ。</small> {if condition="$user.group.group_id eq 1"}
+      <p><a href="{:mac_url('user/login')}" target="_blank">Đăng nhập ngay</a></p>
+      {else/}
+      <p><a href="{:mac_url('user/buy')}" target="_blank">Nạp ngay</a> <a href="javascript:;" onclick="window.parent.MAC.User.BuyPopedom(this)" data-id="{$obj.vod_id}" data-sid="{$param.sid}" data-nid="{$param.nid}" data-type="5" data-mid="{$maccms.mid}">Xác nhận mua hàng</a></p>
+      {/if}
+      {/if} </div>
+  </div>
+</div>
+<script>
+    //方式一本页面计算
+     window.setTimeout(function(){
+     $('.MacPlayer').html( $('.player_showtry').html() );
+     },1000*60*{$popedom.trysee});
+
+    //方式二调用父页面公共函数库
+    //window.parent.MAC.User.PopedomCallBack({$popedom.trysee},$('.player_showtry').html() );
+</script> 
+{/if}
+</body>
+</html>

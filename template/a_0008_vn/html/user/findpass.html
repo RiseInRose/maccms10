@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Khôi phục mật khẩu - {$maccms.site_name} </title>
+<meta name="keywords" content="{$maccms.site_keywords}"/>
+<meta name="description" content="{$maccms.site_description}"/>
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /}
+<div class="layout clearfix">
+  <div class="reg-w">
+    <form method="post" id="fm" action="">
+      <h4>Sử dụng câu hỏi đã đặt để lấy lại mật khẩu</h4>
+      <div class="reg-group">
+        <label class="bd-r" style="letter-spacing: normal;">Tài khoản</label>
+        <input type="text" id="user_name" name="user_name" class="reg-control" placeholder="Vui lòng nhập tài khoản đăng nhập của bạn">
+      </div>
+      <div class="reg-group">
+        <label>Vấn đề tìm lại</label>
+        <input type="text" id="user_question" name="user_question" class="reg-control" placeholder="Vui lòng nhập câu hỏi khôi phục mật khẩu của bạn">
+      </div>
+      <div class="reg-group">
+        <label>Tìm câu trả lời</label>
+        <input type="text" id="user_answer" name="user_answer" class="reg-control" placeholder="Vui lòng nhập câu trả lời khôi phục mật khẩu của bạn">
+      </div>
+      <div class="reg-group">
+        <label>Mật khẩu mới</label>
+        <input type="password" id="user_pwd" name="user_pwd" class="reg-control" placeholder="Vui lòng nhập mật khẩu mới của bạn">
+      </div>
+      <div class="reg-group">
+        <label>Xác nhận mật khẩu</label>
+        <input type="password" id="user_pwd2" name="user_pwd2" class="reg-control" placeholder="请输入您的Xác nhận mật khẩu">
+      </div>
+      <div class="reg-group">
+        <label>Mã xác nhận</label>
+        <input type="text" class="reg-control w150" id="verify" name="verify" placeholder="Vui lòng nhập mã xác minh" autocomplete="off">
+        <img class="fr mr10 mt10 reg-verify-img" src="{:mac_url('verify/index')}" onClick="this.src=this.src+'?'"  alt="Nhấp để làm mới" /> </div>
+      <input type="button" id="btn_submit" class="btn-brand btn-sub" value="Khôi phục ngay">
+    </form>
+  </div>
+  <div class="reg-another">
+    <h5>Đăng ký để tận hưởng dịch vụ thành viên</h5>
+    <h5>Phim có phí</h5>
+    <h5>Phim dành cho thành viên</h5>
+    <h5>Phim đặc biệt</h5>
+    <a href="{:mac_url('user/login')}"><i class="i-pers"></i><span>Nhớ mật khẩu? Đăng nhập ngay</span></a>
+    <a href="{:mac_url('user/findpass')}"><i class="i-pers"></i><span>Sử dụng câu hỏi đã đặt để lấy lại mật khẩu！</span></a> 
+    {if !empty($GLOBALS['config']['email']['type'])}
+    <a href="{:mac_url('user/findpass_msg')}?ac=email"><i class="i-pers"></i><span>Dùng email để lấy lại mật khẩu！</span></a>
+    {/if}
+    {if !empty($GLOBALS['config']['sms']['type'])}
+    <a href="{:mac_url('user/findpass_msg')}?ac=phone"><i class="i-pers"></i><span>Liên kết điện thoại để khôi phục mật khẩu！</span></a>
+    {/if}
+  </div>
+</div>
+
+<!-- // sign-box#regbox end --> 
+<script type="text/javascript">
+
+	$(function(){
+		$("body").bind('keyup',function(event) {
+			if(event.keyCode==13){ $('#btnLogin').click(); }
+		});
+		$('#btn_submit').click(function() {
+			if ($('#user_name').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập người dùng！', 2000); $("#user_name").focus(); return false; }
+			if ($('#user_pwd').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập mật khẩu！', 2000); $("#user_pwd").focus(); return false; }
+			if ($('#verify').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập mã xác minh！', 2000); $("#verify").focus(); return false; }
+
+			$.ajax({
+				url: "{:mac_url('user/findpass')}",
+				type: "post",
+				dataType: "json",
+				data: $('#fm').serialize(),
+				beforeSend: function () {
+					$("#btn_submit").css("background","#fd6a6a").val("loading...");
+				},
+				success: function (r) {
+					if(r.code==1){
+						location.href="{:mac_url('user/index')}";
+					}
+					else{
+						MAC.Pop.Msg(300, 20, r.msg, 2000);
+					}
+				},
+				complete: function () {
+					$('#verify').click();
+					$("#btn_submit").css("background","#fa4646").val("Khôi phục ngay");
+				}
+			});
+
+		});
+	});
+
+</script> 
+{include file="user/foot" /}
+</body>
+</html>

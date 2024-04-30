@@ -1,0 +1,26 @@
+
+<!--登录弹窗开始-->
+<div class="mac_login">
+    <form class="mac_login_form">
+        <div class="login_form_group">
+            Tên thành viên：{$obj.user_name}
+        </div>
+        <div class="login_form_group">
+            Cấp độ thành viên：{$obj.group_name}
+        </div>
+        <div class="login_form_group">
+           Điểm còn lại：{$obj.user_points}
+        </div>
+        <div class="login_form_group">
+            Thời gian đăng nhập lần cuối：{$obj.user_last_login_time|mac_day=color}
+        </div>
+        <div class="login_form_group">
+            Số lần đăng nhập：{$obj.user_login_num}
+        </div>
+        <div class="login_form_link">
+            <a href="{:mac_url('user/index')}">Truy cập trung tâm thành viên</a>
+            <a href="{:mac_url('user/logout')}">Thoát ra</a>
+        </div>
+    </form>
+</div>
+<!--登录弹窗结束-->

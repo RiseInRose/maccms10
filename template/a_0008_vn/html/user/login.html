@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Đăng nhập người dùng - {$maccms.site_name}</title>
+<meta name="keywords" content="{$maccms.site_keywords}"/>
+<meta name="description" content="{$maccms.site_description}"/>
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /}
+<div class="layout clearfix">
+  <div class="reg-w">
+    <form method="post" id="fm" action="">
+      <h4>Thông tin tài khoản</h4>
+      <div class="reg-group">
+        <label class="bd-r" style="letter-spacing: normal;">Tài khoản</label>
+        <input type="text" id="user_name" name="user_name" class="reg-control" placeholder="Vui lòng nhập tài khoản đăng nhập của bạn">
+      </div>
+      <div class="reg-group">
+        <label>Mật khẩu</label>
+        <input type="password" id="user_pwd" name="user_pwd" class="reg-control" placeholder="Vui lòng nhập mật khẩu đăng nhập của bạn">
+      </div>
+      {if condition="$GLOBALS['config']['user']['login_verify'] eq 1"}
+      <div class="reg-group">
+        <label>Mã xác nhận</label>
+        <input type="text" class="reg-control w150" id="verify" name="verify" placeholder="Vui lòng nhập mã xác minh" autocomplete="off">
+        <img class="fr mr10 mt10 reg-verify-img" id="verify_img" src="{:mac_url('verify/index')}" onClick="this.src=this.src+'?'" alt="Nhấp để làm mới" /> </div>
+      {/if}
+      <input type="button" id="btn_submit" class="btn-brand btn-sub" value="Đăng nhập ngay">
+    </form>
+  </div>
+  <div class="reg-another">
+    <h5>Đăng ký để tận hưởng dịch vụ thành viên</h5>
+    <h5>Phim có phí</h5>
+    <h5>Phim dành cho thành viên</h5>
+    <h5>Phim đặc biệt</h5>
+    <h5>Bạn cũng có thể đăng nhập trực tiếp bằng các cách sau đây：</h5>
+    {if condition="$GLOBALS['config']['connect']['qq']['status'] eq 1"}
+    
+    {/if}
+    {if condition="$GLOBALS['config']['connect']['weixin']['status'] eq 1"}
+    
+    {/if} <a href="{:mac_url('user/oauth')}?type=qq"><img src="{$maccms.path_tpl}images/user/qq_login.gif" alt=""/></a> </div>
+</div>
+
+<!-- // sign-box#regbox end --> 
+<script type="text/javascript">
+
+	$(function(){
+		$("body").bind('keyup',function(event) {
+			if(event.keyCode==13){ $('#btnLogin').click(); }
+		});
+		$('#btn_submit').click(function() {
+			if ($('#user_name').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập người dùng！', 2000); $("#user_name").focus(); return false; }
+			if ($('#user_pwd').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập mật khẩu！', 2000); $("#user_pwd").focus(); return false; }
+			if ($('#verify').length> 0 && $('#verify').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập mã xác minh！', 2000); $("#verify").focus(); return false; }
+
+			$.ajax({
+				url: "{:mac_url('user/login')}",
+				type: "post",
+				dataType: "json",
+				data: $('#fm').serialize(),
+				beforeSend: function () {
+					$("#btn_submit").css("background","#fd6a6a").val("loading...");
+				},
+				success: function (r) {
+					if(r.code==1){
+						location.href="{:mac_url('user/index')}";
+					}
+					else{
+						MAC.Pop.Msg(300, 20, r.msg, 2000);
+						$('#verify_img').click();
+					}
+				},
+				complete: function () {
+					$("#btn_submit").css("background","#fa4646").val("Đăng nhập ngay");
+				}
+			});
+
+		});
+	});
+
+</script> 
+{include file="user/foot" /}
+</body>
+</html>

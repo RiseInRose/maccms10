@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Nạp tiền WeChat - Trung tâm thành viên - {$maccms.site_name}</title>
+<meta name="keywords" content="{$maccms.site_keywords}"/>
+<meta name="description" content="{$maccms.site_description}"/>
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /}
+<div id="member" class="fn-clear">
+  {include file="user/left"}
+  <div id="right">
+    <h2>Nạp tiền trực tuyến qua WeChat</h2>
+    <form method="post" target="_blank" action="{:mac_url('user/gopay')}">
+      <input type="hidden" name="order_id" value="{$info.order_id}">
+      <input type="hidden" name="order_code" value="{$info.order_code}">
+      <div class="line40">
+        <p><span class="xiang">Số đơn hàng：</span>{$order.order_code}</p>
+        <p><span class="xiang">Số tiền đơn hàng：</span>{$order.order_price}Đồng</p>
+        <p><span class="xiang"></span><img src="{:mac_url('user/qrcode')}?data={$payment.code_url|urlencode}" width="150" height="150"/></p>
+        <p><span class="xiang"></span>Mở WeChat, quét mã để thanh toán</p>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  $("#left li.user-left-buy").addClass('hover');
+	function check(){
+		$.get("{:mac_url('user/order_info')}" + '?order_id={$order.order_id}', function(data){
+			if(data.info.order_status == 1){
+				MAC.Pop.Msg(300, 20, 'Thanh toán xong, sắp chuyển tới trung tâm thành viên', 2000);
+				window.location.href = "{:mac_url('user/index')}";
+			}
+		});
+	}
+	$(function(){
+		setInterval(function(){check()}, 5000);  //5秒查询一次支付是否成功
+	})
+</script> 
+{include file="user/foot" /}
+</body>
+</html>

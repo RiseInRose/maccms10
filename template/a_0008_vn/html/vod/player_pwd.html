@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<title>Thông báo hệ thống......</title>
+{include file="block/include"}
+<style>
+  body{
+    background-color:#000;
+  }
+.item {
+  line-height: 50px
+}
+</style>
+</head>
+<body>
+<div class="mac_msg_jump inner">
+  <div class="msg_jump_tit">Thông báo hệ thống...</div>
+  <div class="title" style="text-align: center">Kính mến, cần mật khẩu để truy cập dữ liệu này~~~</div>
+  <div class="text">
+    <form id="form1" name="form1" action="" style="margin:0;width:400px;text-align: center;" method="post" onSubmit="MAC.Pwd.Check(this);return false;" data-mid="{$maccms.mid}" data-id="{$obj.vod_id}" data-type="4">
+      <div class="item">
+        <label>Mật khẩu：</label>
+        <input class="ewave-input-item" type="password" name="pwd" placeholder="Vui lòng nhập mật khẩu truy cập tại đây..." required/>
+        {if condition="$obj.vod_pwd_play_url neq ''"} <a href="{$obj.vod_pwd_url}" target="_blank" style="margin-left:5px;">Nhấp để lấy mật khẩu</a> {/if} </div>
+      <div class="item"> <input class="submit_btn ewave-input-item ewave-submit-btn" type="submit"  value="Nhấp để xác nhận" style="width:auto;padding-left:10px;padding-right:10px;"/> </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

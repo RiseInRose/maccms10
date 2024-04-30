@@ -1,0 +1,89 @@
+{php}
+$label_name='top';
+{/php}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+{include file="block/seo"}
+{include file="block/include"}
+</head>
+<body>
+{include file="block/head"}
+<div class="container">
+  <div class="layout-box top-weizhi mb-xs-10 hidden-sm hidden-xs">
+    <label>Vị trí hiện tại：</label>
+    <a href="{$maccms.path}">{$maccms.site_name}</a><i>&gt;</i><a href="{:mac_url('label/top')}">Bảng xếp hạng</a></div>
+  <div class="top-nav text-left fenlei">
+    <div class="nav-box hidden fenlei-nav" id="nav-select">
+      <ul class="swiper-wrapper">
+        <li class="swiper-slide tab-toggle active"><a href="javascript:;">
+          <h4>Bảng xếp hạng</h4>
+          </a></li>
+        {maccms:type ids="parent" flag="vod" by="sort" order="asc" id="type" key="key_type"}
+        <li class="swiper-slide tab-toggle"><a href="javascript:;">
+          <h4>{$type.type_name}Bảng xếp hạng</h4>
+          </a></li>
+        {/maccms:type}
+      </ul>
+    </div>
+  </div>
+  <div class="tab-content">
+    <div class="row">
+      <div class="col-md-wide-75 col-sm-wide-1 pt-xs-0 pr-xs-5 main-left">
+        <div class="pannel-box clearfix">
+          <div class="box-title"><span class="iconfont icon-remen"></span>
+            <h1>Bảng tổng sắp</h1>
+          </div>
+          <ul class="img-list clearfix news-list">
+            {maccms:vod num="20" by="hits" order="desc"}
+            {include file="block/item_search"}
+            {/maccms:vod}
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-wide-25 pt-xs-0 main-right hidden-sm hidden-xs" style="position:sticky;top:-10px;">
+        <div class="pannel-box clearfix">
+          <div class="box-title"><span class="iconfont icon-xin"></span>
+            <h2>Đề xuất phim</h2>
+          </div>
+          <ul class="txt-list txt-list-hot p-xs-0">
+            {maccms:vod num="10" by="hits_week" order="desc"}
+            <li><i>{$key}</i><span class="text-color pull-right">{include file="block/status"}</span><a href="{$vo|mac_url_vod_detail}" title="{$vo.vod_name}" {if !empty($vo.vod_color)} style="color:#{$vo.vod_color}"{/if}>{$vo.vod_name}</a></li>
+            {/maccms:vod}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {maccms:type ids="parent" flag="vod" by="sort" order="asc" id="type" key="key_type"}
+    <div class="row" style="display:none;">
+      <div class="col-md-wide-75 col-sm-wide-1 pt-xs-0 pr-xs-5 main-left">
+        <div class="pannel-box clearfix">
+          <div class="box-title"><span class="iconfont icon-remen"></span>
+            <h1>{$type.type_name}Bảng xếp hạng</h1>
+          </div>
+          <ul class="img-list clearfix news-list">
+            {maccms:vod num="20" type="'.$type['type_id'].'" by="hits" order="desc"}
+            {include file="block/item_search"}
+            {/maccms:vod}
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-wide-25 pt-xs-0 main-right hidden-sm hidden-xs" style="position:sticky;top:-10px;">
+        <div class="pannel-box clearfix">
+          <div class="box-title"><span class="iconfont icon-xin"></span>
+            <h2>{$type.type_name}Đề nghị</h2>
+          </div>
+          <ul class="txt-list txt-list-hot p-xs-0">
+            {maccms:vod num="10" type="'.$type['type_id'].'" by="hits_week" order="desc"}
+            <li><i>{$key}</i><span class="text-color pull-right">{include file="block/status"}</span><a href="{$vo|mac_url_vod_detail}" title="{$vo.vod_name}" {if !empty($vo.vod_color)} style="color:#{$vo.vod_color}"{/if}>{$vo.vod_name}</a></li>
+            {/maccms:vod}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {/maccms:type}
+  </div>
+</div>
+{include file="block/foot"}
+</body>
+</html>

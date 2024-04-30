@@ -1,0 +1,62 @@
+<header class="header-top top-fixed home vod color">
+  <div class="container">
+    <div class="header-logo"><a class="hidden-xs" href="{$maccms.path}" title="{$maccms.site_name}"><img src="{if !empty($maccms.site_logo)}{$maccms.site_logo|mac_url_img}{else/}{$maccms.path_tpl}images/logo.png{/if}"/></a><a class="visible-xs text-fff" href="{$maccms.path}" style="white-space: nowrap;">{$maccms.site_name}</a></div>
+    <ul class="header-menu hidden-xs hidden-sm">
+      <li class="hidden-sm hidden-xs {if $maccms.aid==1} active{/if}"><a href="{$maccms.path}">Trang chủ</a></li>
+      {maccms:type ids="parent" num="4" flag="vod" by="sort" order="asc"}
+      <li class="hidden-xs {if $GLOBALS.type_id==$vo.type_id||$GLOBALS.type_pid==$vo.type_id} active{/if}"><a href="{$vo|mac_url_type}">{$vo.type_name}</a></li>
+      {/maccms:type}
+      {maccms:type ids="parent" num="2" flag="art" by="sort" order="asc"}
+      <li class="hidden-xs {if $GLOBALS.type_id==$vo.type_id||$GLOBALS.type_pid==$vo.type_id} active{/if}"><a href="{$vo|mac_url_type}">{$vo.type_name}</a></li>
+      {/maccms:type}
+      <li class="header-menu-more"><a href="javascript:;">Thêm<i class="arrow-down"></i></a>
+        <div class="dropdown bottom fadeInDown clearfix">
+          <ul class="dropdown-box nav-list clearfix">
+            {maccms:type ids="parent" num="120" start="5" flag="vod" by="sort" order="asc"}
+            <li class="col-xs-3"><a href="{$vo|mac_url_type}">{$vo.type_name}</a></li>
+            {/maccms:type}
+            {maccms:type ids="parent" num="120" start="3" flag="art" by="sort" order="asc"}
+            <li class="col-xs-3"><a href="{$vo|mac_url_type}">{$vo.type_name}</a></li>
+            {/maccms:type}
+            <li class="col-xs-3"><a href="{:mac_url('label/top')}">Bảng xếp hạng</a></li>
+            <li class="col-xs-3"><a href="{:mac_url('gbook/index')}">Phản hồi bình luận</a></li>
+            <li class="col-xs-3"><a href="{:mac_url('map/index')}">Sơ đồ trang web</a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+    <div class="header-search">
+      <form id="formsearch" action="{:mac_url('vod/search')}">
+        <input type="search" name="wd" placeholder="Vui lòng nhập từ khóa" autocomplete="off"/>
+        <button type="submit" class="search-submit"><i class="iconfont icon-sousuo"></i><span class="none">Tìm kiếm</span></button>
+      </form>
+    </div>
+    {if $GLOBALS.config.user.status==1}
+    <div id="user-login" class="user-login user-playlog dropdown-hover"><a class="user-login-link"{if !empty($user.user_id)} href="{:mac_url('user/index')}" target="_blank" title="Trung tâm người dùng"{else/} href="javascript:;" title="Nhấn để đăng nhập" onClick="MAC.User.Login();"{/if}> <i class="iconfont icon-user"></i></a>
+    </div>
+    {/if}
+    <div id="user-playlog" class="user-playlog dropdown-hover mac_history"> <i class="iconfont icon-shijian"></i>
+      <div id="playlog-box" class="playlog-box box-show fadeInDown">
+        <div class="playlog-tool"><a class="playlog-clear" href="javascript:;" onClick="MAC.History.Clear();">Trống hết tất cảLịch sử phát lại</a><a class="playlog-close none" href="javascript:;">Đóng</a></div>
+        <ul class="mac_history_box">
+          <strong>Không có danh sách lịch sử xem</strong>
+        </ul>
+      </div>
+      <span class="none">Xem lịch sử</span>
+    </div>
+  </div>
+</header>
+<!--手机导航开始-->
+<nav class="header-nav-wrap">
+  <ul class="swiper-wrapper clearfix">
+    <li class="swiper-slide {if $maccms.aid==1} active{/if}"><a href="{$maccms.path}">Trang chủ</a></li>
+    {maccms:type ids="parent" flag="vod" by="sort" order="asc"}
+    <li class="swiper-slide {if $GLOBALS.type_id==$vo.type_id||$GLOBALS.type_pid==$vo.type_id} active{/if}"><a href="{$vo|mac_url_type}">{$vo.type_name}</a></li>
+    {/maccms:type}
+    <li class="swiper-slide {if $label_name=='top'} active{/if}"><a href="{:mac_url('label/top')}">Bảng xếp hạng</a></li>
+    <li class="swiper-slide {if $maccms.aid==4} active{/if}"><a href="{:mac_url('gbook/index')}">Phản hồi bình luận</a></li>
+    <li class="swiper-slide {if $maccms.aid==2} active{/if}"><a href="{:mac_url('map/index')}">Sơ đồ trang web</a></li>
+  </ul>
+</nav>
+<!--手机导航结束-->
+<div class="header-top-ok color"></div>

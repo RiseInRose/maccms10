@@ -1,0 +1,26 @@
+
+<!--登录弹窗开始-->
+<div class="mac_login">
+    <form class="mac_login_form">
+        <div class="login_form_group">
+            <input type="text" class="mac_u_name" name="user_name" placeholder="Điện thoại di động/Tài khoản đăng nhập">
+        </div>
+        <div class="login_form_group">
+            <input type="password" class="mac_u_pwd" name="user_pwd" placeholder="Mật khẩu đăng nhập">
+        </div>
+        {if condition="$GLOBALS['config']['user']['login_verify'] eq 1"}
+        <div class="login_form_group clearfix">
+            <input type="text" class="mac_u_verify" name="verify" placeholder="Vui lòng nhập mã xác minh" autocomplete="off">
+            <img class="mac_verify_img" src="{:mac_url('verify/index')}" onclick="this.src = this.src+'?'">
+        </div>
+        {/if}
+        <div class="login_form_group">
+            <input type="button" class="login_form_submit" value="Đăng nhập">
+        </div>
+        <div class="login_form_link">
+            <a href="{:mac_url('user/reg')}" target="_top">Đăng ký</a>
+            <a href="{if $GLOBALS.config.user.reg_phone_sms != 0}{:mac_url('user/findpass_msg')}?ac=phone{elseif $GLOBALS.config.user.reg_email_sms !=0/}{:mac_url('user/findpass_msg')}?ac=email{else/}{:mac_url('user/findpass')}{/if}" target="_top">Quên mật khẩu</a>
+        </div>
+    </form>
+</div>
+<!--登录弹窗结束-->

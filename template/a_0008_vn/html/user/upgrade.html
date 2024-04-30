@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>升级会员组 - Trung tâm thành viên - {$maccms.site_name}</title>
+<meta name="keywords" content="{$maccms.site_keywords}"/>
+<meta name="description" content="{$maccms.site_description}"/>
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /} 
+<!-- Trung tâm thành viên -->
+<div id="member" class="fn-clear">
+  {include file="user/left"}
+  <div id="right">
+    <h2>Nâng cấp thành viên</h2>
+    <div class="line40">
+      <p><span class="xiang">Nhóm thành viên thuộc về：</span>[{$obj.group.group_name}] </p>
+      <p><span class="xiang">Điểm còn lại：</span>[{$obj.user_points}] </p>
+      <p><span class="xiang">到期Thời gian：</span>{if condition="$obj.group_id lt 3"}[Không giới hạn thời gian]{else/}[{$obj.user_end_time|mac_day}]{/if}</p>
+      <p><span class="xiang">点击升级项：</span><span class="fen">点击需要的会员组和时长进行购买升级</span></p>
+    </div>
+    <form action="" method="post" name="form3" id="form3">
+      <div class="shengji"> 
+        <!-- BEGIN row --> 
+        {volist name="group_list" id="vo"}
+        {if condition="$vo.group_id gt 2 && $vo.group_status eq 1"}
+        <div class="huang grade" style="width:170px; line-height:40px; text-align:center; color:#fff; margin-right:15px; display:inline-block;" data-id="{$vo.group_id}" data-name="{$vo.group_name}" data-points="{$vo.group_points_day}" data-long="day"> {$vo.group_name}-包天：{$vo.group_points_day}Điểm </div>
+        <div class="lan grade" style="width:170px; line-height:40px; text-align:center; color:#fff; margin-right:15px; display:inline-block;" data-id="{$vo.group_id}" data-name="{$vo.group_name}" data-points="{$vo.group_points_week}" data-long="week"> {$vo.group_name}-包周：{$vo.group_points_week}Điểm </div>
+        <div class="hong grade" style="width:170px; line-height:40px; text-align:center; color:#fff; margin-right:15px; display:inline-block;" data-id="{$vo.group_id}" data-name="{$vo.group_name}" data-points="{$vo.group_points_month}" data-long="month"> {$vo.group_name}-包月：{$vo.group_points_month}Điểm </div>
+        <div class="zi grade" style="width:170px; line-height:40px; text-align:center; color:#fff; margin-right:15px; display:inline-block;" data-id="{$vo.group_id}" data-name="{$vo.group_name}" data-points="{$vo.group_points_year}" data-long="year"> {$vo.group_name}-包年：{$vo.group_points_year}Điểm </div>
+        {/if}
+        {/volist} 
+        <!-- END row --> 
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  $("#left li.user-left-upgrade").addClass('hover');
+		$('.grade').click(function(){
+			var that=$(this);
+			var group_id = that.attr('data-id');
+			var group_name = that.attr('data-name');
+			var long = that.attr('data-long');
+			var points = that.attr('data-points');
+	
+			if(confirm('Bạn có chắc chắn muốn升级到【'+group_name+'】吗,需要花费【'+points+'】Điểm')) {
+				$.ajax({
+					url: "{:mac_url('user/upgrade')}",
+					type: "post",
+					dataType: "json",
+					data: {group_id: group_id,long:long },
+					beforeSend: function () {
+						$("#btn_submit").css("background","#fd6a6a").val("loading...");
+					},
+					success: function (r) {
+						MAC.Pop.Msg(300, 20, r.msg, 2000);
+						if (r.code == 1) {
+							location.reload();
+						}
+					},
+					complete: function () {
+						$("#btn_submit").css("background","#fa4646").val("Gửi đi");
+					}
+				});
+			}
+		});
+</script> 
+{include file="user/foot" /}
+</body>
+</html>

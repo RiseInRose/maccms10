@@ -1,0 +1,19 @@
+<form class="gbook_form ewave-comment-form">
+  <input type="hidden" name="gbook_rid" value="{$param.id}">
+  <div class="ewave-form-group">
+    <textarea class="gbook_content ewave-input-item ewave-comment-content" name="gbook_content" placeholder="Hãy chia sẻ ý kiến của bạn..." rows="4">{$param.name}</textarea>
+  </div>
+  <div class="ewave-form-group">
+    {if condition="$gbook.verify eq 1"}
+    <input class="ewave-input-item ewave-comment-verify" name="verify" type="text" placeholder="Mã xác nhận" autocomplete="off">
+    <img class="ewave-input-item ewave-comment-verify-img mac_verify_img_report" src="{:mac_url('verify/index')}" title="Không nhìn rõ? Đổi cái khác！" onclick="this.src=this.src+'?'">
+    {/if}
+    <input type="button" value="Đăng tải" class="gbook_submit ewave-input-item ewave-submit-btn ewave-comment-submit"></div>
+</form>
+<script>
+$(function(){
+  eWave.Gbook.Login = {$gbook.login};
+  eWave.Gbook.Verify = {$gbook.verify};
+  eWave.Gbook.Init();
+});
+</script> 

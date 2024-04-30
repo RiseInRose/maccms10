@@ -1,0 +1,1 @@
+{if ($vo.type.type_id == 1) || ($vo.type_id_1 == 1||$vo.type.type_name == 'Phim') || ($vo.type_1.type_name == 'Phim')}{$vo.vod_remarks|default='Chất lượng cao'}{elseif !empty($vo.vod_remarks)/}{$vo.vod_remarks}{elseif !empty($vo.vod_serial)/}Cập nhật đến tập{$vo.vod_serial}集{else/}Toàn bộ series{/if}

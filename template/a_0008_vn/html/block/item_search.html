@@ -1,0 +1,11 @@
+<li class="col-md-1 col-sm-1 col-xs-1 pl-xs-5 mb-xs-10">
+              <div class="col-md-5 col-sm-wide-25 col-xs-wide-35 p-xs-0"><a class="img-pic lazyload" href="{$vo|mac_url_vod_detail}" title="{$vo.vod_name}" data-original="{$vo.vod_pic|mac_url_img}"><span class="vtitle text-right">{include file="block/status"}</span><span class="tipsc text-right">{$key}</span></a></div>
+              <div class="col-md-wide-8 col-sm-wide-65 col-xs-wide-65 pl-md-20 pl-xs-10 pt-xs-0 pb-xs-0">
+                <div class="text-overflow">
+                  <h2 class="font16 pull-left"><a href="{$vo|mac_url_vod_detail}" title="{$vo.vod_name}" {if !empty($vo.vod_color)} style="color:#{$vo.vod_color}"{/if}>{$vo.vod_name}</a></h2>
+                  <span class="text-color pull-right search-hits">{$vo.vod_hits}</span> </div>
+                <div class="news-tips mt-xs-10 pl-xs-0"><a href="{$vo.type|mac_url_type}">{$vo.type.type_name}</a>{if !empty($vo.vod_class)}{maccms:foreach name=":explode(',',$vo.vod_class)" id="class" key="key_class"}<a href="{:mac_url_type($vo.type,['class'=>$class],show)}">{$class}</a>{/maccms:foreach}{/if}</div>
+                <div class="vod-txt text-muted mt-xs-10">{$vo.vod_content|mac_filter_html|mac_substring=150}</div>
+                <div class="news-tips hidden-xs mt-xs-10 pl-xs-0">{if !empty($vo.vod_actor)}{$vo.vod_actor|mac_url_create='actor','vod','search','&nbsp;'}{/if}</div>
+              </div>
+            </li>

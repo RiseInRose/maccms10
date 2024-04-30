@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Trung tâm thành viên - {$maccms.site_name}</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /} 
+<!-- Trung tâm thành viên -->
+<div id="member" class="fn-clear">
+  {include file="user/left"}
+  <div id="right">
+    <h2>Thông tin của tôi</h2>
+    <div id="tab">
+      <div class="list">
+        <ul class="fn-clear">
+          <li><a href="{:mac_url('user/index')}">Thông tin cơ bản</a></li>
+          <li><a href="{:mac_url('user/info')}">Chỉnh sửa thông tin</a></li>
+          <li class="cur">Quyền hạn của tôi</li>
+        </ul>
+      </div>
+      <div id="listCon"> 
+        <!-- Thông tin cơ bản -->
+        <div class="cur">
+          <p><span class="xiang">Tên người dùng：</span>{$obj.user_name}</p>
+          <p><span class="xiang">Nhóm người dùng：</span><span class="fen">{$obj.group.group_name}</span></p>
+          <p><span class="xiang">Hạn mức：</span><span class="fen">{if condition="$obj.group_id lt 3"}Không giới hạn thời gian{else} {$obj.user_end_time|mac_day}{/if}</span></p>
+          <p><span class="xiang">Danh sách quyền：</span>Màu xanh là biểu thị người dùng có quyền truy cập, màu xám là không có quyền truy cập, nếu bạn muốn tăng quyền truy cập bạn có thể chọn nâng cấp nhóm thành viên</p>
+          {volist name="type_tree" id="vo"}
+          <p class="quanxian-box"> <span class="quanxian">{$vo.type_name}</span> 
+            {foreach name="$vo.popedom" id="v2"}
+            {if condition="$v2 eq 1"}<span class="you">{$key}</span>{else}<span class="wu">{$key}</span>{/if}
+            {/foreach}
+          </p>
+          {volist name="vo.child" id="child"}
+          <p class="quanxian-box"> <span class="quanxian">{$child.type_name}</span>
+            {foreach name="$child.popedom" id="v2"}
+            {if condition="$v2 eq 1"}<span class="you">{$key}</span>{else}<span class="wu">{$key}</span>{/if}
+            {/foreach}
+          </p>
+          {/volist}
+          
+          {/volist}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="user/foot" /}
+<script>
+  $("#left li.user-left-index").addClass('hover');  
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+{include file="block/seo"}
+{include file="block/include"}
+</head>
+<body>
+{include file="block/head"}
+<div class="container">
+  <div class="layout-box top-weizhi hidden-xs">
+    <label>Vị trí hiện tại：</label>
+    <a href="{$maccms.path}">{$maccms.site_name}</a><i>&gt;</i><a href="{:mac_url('map/index')}">Sơ đồ trang web</a>
+  </div>
+  {maccms:type ids="parent" flag="vod" by="sort" order="asc" id="type" key="key_type"}
+  {php}
+  if(!empty($type['type_extend']['area'])) {
+  $areaArray=explode(',',$type['type_extend']['area']);
+  }elseif(!empty($type['parent']['type_extend']['area'])){
+  $areaArray=explode(',',$type['parent']['type_extend']['area']);
+  }else{
+  $areaArray=explode(',',$GLOBALS['config']['app']['vod_extend_area']);
+  }
+  if(!empty($type['type_extend']['class'])) {
+  $classArray=explode(',',$type['type_extend']['class']);
+  }elseif(!empty($type['parent']['type_extend']['class'])){
+  $classArray=explode(',',$type['parent']['type_extend']['class']);
+  }else{
+  $classArray=explode(',',$GLOBALS['config']['app']['vod_extend_class']);
+  }
+  {/php}
+  <div class="layout-box">
+    <div class="box-title"><span class="title-lb"></span>
+      <h2><a class="font16" href="{$type|mac_url_type}">{$type.type_name}</a></h2>
+      <a class="box-more pull-right" href="{$type|mac_url_type}" title="{$type.type_name}"><span class="iconfont icon-weizhi"></span>Thêm<i>&gt;</i></a></div>
+    <div class="sitemap"> {if !empty($type.childids)}
+      <ul class="clearfix">
+        <li class="title"><span class="text-color">Phân loại</span></li>
+        {maccms:type ids="child" parent="'.$type['type_id'].'" by="sort" order="asc"}
+        <li><a target="_blank" href="{$vo|mac_url_type}" title="{$vo.type_name}">{$vo.type_name}</a></li>
+        {/maccms:type}
+      </ul>
+      {/if}
+      <ul class="clearfix">
+        <li class="title"><span class="text-color">Loại</span></li>
+        {maccms:foreach name="classArray" id="class" key="key_class"}
+        <li><a href="{:mac_url_type($type,['class'=>$class],show)}" title="{$class}{$type.type_name}">{$class}</a></li>
+        {/maccms:foreach}
+      </ul>
+    </div>
+  </div>
+  {/maccms:type} </div>
+{include file="block/foot"}
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+{include file="block/seo"}
+{include file="block/include"}
+</head>
+<body>
+{include file="block/head"}
+<div class="container">
+  <div class="layout-box top-weizhi mb-xs-10 hidden-sm hidden-xs">
+    <label>Vị trí hiện tại：</label>
+    <a href="{$maccms.path}">{$maccms.site_name}</a><i>&gt;</i><a>{$param.wd}{$param.actor}{$param.director}{$param.area}{$param.lang}{$param.year}{$param.class}{$param.tag} Tìm kiếm结果</a></div>
+  <div class="row">
+    <div class="col-md-wide-75 col-sm-wide-1 pt-xs-0 pr-xs-5 mt-xs-0 main-left">
+      <div class="pannel-box mt-xs-0 clearfix">
+        <div class="box-title"><span class="iconfont icon-search"></span>
+          <h2>Tìm kiếm {$param.wd}{$param.actor}{$param.director}{$param.area}{$param.lang}{$param.year}{$param.class}{$param.tag}</h2>
+          <span class="pull-right font13 text-muted">Tổng cộng tìm thấy“<span class="text-color" id="mac_total">0</span>”kết quả</span></div>
+        <div class="clearfix" id="content">
+          <ul class="img-list clearfix news-list hide-hits">
+            {maccms:vod num="10" paging="yes" by="time" order="desc" pageurl="vod/search"}
+            {include file="block/item_search"}
+            {/maccms:vod}
+          </ul>
+        </div>
+      </div>
+      {include file="block/paging"}
+    </div>
+    <div class="col-md-wide-25 pt-xs-0 main-right hidden-sm hidden-xs" style="position:sticky;top:-10px;">
+      <div class="pannel-box mt-xs-0 clearfix">
+        <div class="box-title "><span class="title-lb"></span>
+          <h2>Phim ảnh hot</h2>
+        </div>
+        <ul class="txt-list txt-list-hot p-xs-0">
+          {maccms:vod num="10" by="hits_week" order="desc"}
+          <li><i>{$key}</i><span class="text-color pull-right">{include file="block/status"}</span><a href="{$vo|mac_url_vod_detail}" title="{$vo.vod_name}">{$vo.vod_name}</a></li>
+          {/maccms:vod}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="block/foot"}
+</body>
+</html>

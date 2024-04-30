@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<title>Sử dụng điểm để mua quyền</title>
+{include file="block/include"}
+</head>
+<body>
+{include file="block/head"}
+<div class="mac_msg_jump">
+  <div class="msg_jump_tit">Thông báo hệ thống:</div>
+  <div class="title">Người dùng thân mến：</div>
+  <div class="text"> {$popedom.msg}
+    <p>Gợi ý：Thanh toán một lần, xem mãi mãi, không trừ phí lặp lại, cảm ơn sự hỗ trợ。</p>
+    <p> {if condition="$user.group.group_id eq 1"} <a href="javascript:;" class="mac_user ewave-input-item ewave-submit-btn">Đăng nhập ngay</a> {else/} <a class="ewave-input-item ewave-submit-btn" href="{:mac_url('user/buy')}" target="_blank">Nạp ngay</a> <a class="ewave-input-item ewave-submit-btn" href="javascript:;" onclick="MAC.User.BuyPopedom(this)" data-id="{$obj.vod_id}" data-sid="{$param.sid}" data-nid="{$param.nid}" data-mid="{$maccms.mid}" data-type="{if condition="$obj.player_info.flag eq 'play'"}4{else/}5{/if}" data-mid="{$maccms.mid}">Xác nhận mua hàng</a> {/if} </p>
+  </div>
+</div>
+{include file="block/foot"}
+</body>
+</html>

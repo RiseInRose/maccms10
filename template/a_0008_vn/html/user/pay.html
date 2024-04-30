@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Nạp tiền thẻ cào - Trung tâm thành viên - {$maccms.site_name}</title>
+<meta name="keywords" content="{$maccms.site_keywords}"/>
+<meta name="description" content="{$maccms.site_description}"/>
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /}
+<div id="member" class="fn-clear">
+  {include file="user/left"}
+  <div id="right">
+    <h2>Nạp tiền trực tuyến</h2>
+    <form method="post" target="_blank" action="{:mac_url('user/gopay')}">
+      <input type="hidden" name="order_id" value="{$info.order_id}">
+      <input type="hidden" name="order_code" value="{$info.order_code}">
+      <div class="line40">
+        <p><span class="xiang">Số đơn hàng：</span>{$info.order_code}</p>
+        <p><span class="xiang">Số tiền đơn hàng：</span>{$info.order_price}Đồng</p>
+        <p><span class="xiang">Phương thức thanh toán：</span>
+          <select class="member-input" name="payment" id="payment">
+            <option value ="">Vui lòng chọn...</option>
+            {volist name="ext_list" id="vo"}
+					  <option value="{$key}">{$vo}Thanh toán</option>
+            {/volist}
+				  </select>
+        </p>
+        <p class="info-item" id="paytype_box" style="display:none;"> <span class="xiang">Loại thanh toán：</span>
+          <select class="paytype member-input" id="paytype" name="paytype">
+          </select>
+        </p>
+        <p>
+          <span class="xiang"></span>
+          <input type="submit" id="btn_submit" class="jifen2-button search-button" value="Xác nhận">
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  $("#left li.user-left-buy").addClass('hover');
+	var codepay_type = '{maccms:foreach name=":explode(',',$config.codepay.type)"}<option value ="{$vo}">{if condition="$vo==1"}支付宝二维码{elseif condition="$vo==2"/}QQ钱包二维{elseif condition="$vo==3"/}微信二维码{/if}</option>{/maccms:foreach}';
+	var zhapay_type ='{maccms:foreach name=":explode(',',$config.zhapay.type)"}<option value ="{$vo}">{if condition="$vo==1"}微信{elseif condition="$vo==2"/}支付宝{/if}</option> {/maccms:foreach}';
+
+	$("#payment").change(function() {
+		$('#paytype').html('');
+		if($("#payment").val().toLowerCase()=="codepay" || $("#payment").val().toLowerCase()=="zhapay" ){
+			if($("#payment").val().toLowerCase()=="codepay") {
+				$('#paytype').html(codepay_type);
+			}
+			if($("#payment").val().toLowerCase()=="zhapay") {
+				$('#paytype').html(zhapay_type);
+			}
+			$("#paytype_box").slideDown();
+		}
+		else{
+			$("#paytype_box").slideUp();
+		}
+	});
+
+	$(".paytype").change(function() {
+		$('#paytype').val( $(this).val() );
+	});
+</script> 
+{include file="user/foot" /}
+</body>
+</html>

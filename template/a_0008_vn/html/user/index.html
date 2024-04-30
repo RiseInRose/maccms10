@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Trung tâm thành viên - {$maccms.site_name}</title>
+<meta name="keywords" content="Trung tâm thành viên">
+<meta name="description" content="Trung tâm thành viên">
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /} 
+<!-- Trung tâm thành viên -->
+<div id="member" class="fn-clear">
+  {include file="user/left"}
+  <div id="right">
+    <h2>Thông tin của tôi</h2>
+    <div id="tab">
+      <div class="list">
+        <ul class="fn-clear">
+          <li class="cur">Thông tin cơ bản</li>
+          <li><a href="{:mac_url('user/info')}">Chỉnh sửa thông tin</a></li>
+          <li><a href="{:mac_url('user/popedom')}">Quyền hạn của tôi</a></li>
+        </ul>
+      </div>
+      <div id="listCon"> 
+        <!-- Thông tin cơ bản -->
+        <div class="cur">
+          <p><span class="xiang">Tên người dùng：</span>{$obj.user_name}</p>
+          <p><span class="xiang">Nhóm thành viên thuộc về：</span>{$obj.group.group_name}</p>
+          <p><span class="xiang">Thời hạn thành viên：</span>{$obj.user_end_time|mac_day}</p>
+          <p><span class="xiang">Số QQ：</span>{$obj.user_qq}</p>
+          <p><span class="xiang">Địa chỉ Email：</span>{$obj.user_email}</p>
+          <p><span class="xiang">Thời gian đăng ký：</span>{$obj.user_reg_time|mac_day}</p>
+          <p><span class="xiang">IP đăng nhập：</span>{$obj.user_login_ip|long2ip}</p>
+          <p><span class="xiang">Thời gian đăng nhập：</span>{$obj.user_login_time|mac_day}</p>
+          <p><span class="xiang">Điểm tài khoản：</span>{$obj.user_points}</p>
+          {if $GLOBALS['config']['user']['invite_reg_points'] gt 0}
+          <p><span class="xiang">推广注册链接：</span>
+            <input id="url" class="member-input" value="{$maccms.http_type}{$maccms.site_url}{:mac_url('user/reg')}?uid={$obj.user_id}" size="70" onFocus="this.select()">
+          </p>
+          {/if}
+          {if $GLOBALS['config']['user']['invite_visit_points'] gt 0}
+          <p><span class="xiang">Liên kết truy cập quảng cáo：</span>
+            <input id="url2" class="member-input" value="{$maccms.http_type}{$maccms.site_url}{:mac_url('user/visit')}?uid={$obj.user_id}" size="70" onFocus="this.select()">
+          </p>
+          {/if} </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $("#left li.user-left-index").addClass('hover');
+</script>
+{include file="user/foot" /} 
+</body>
+</html>

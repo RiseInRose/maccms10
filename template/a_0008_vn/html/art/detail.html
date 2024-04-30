@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+{include file="block/seo"}
+{include file="block/include"}
+</head>
+<body>
+{include file="block/head"}
+<div class="container">
+  <div class="layout-box top-weizhi mb-xs-10 hidden-sm hidden-xs">
+    <label>Vị trí hiện tại：</label>
+    <a href="{$maccms.path}">{$maccms.site_name}</a>{if !empty($obj.type_id_1)}<i>&gt;</i><a href="{$obj.type_1|mac_url_type}">{$obj.type_1.type_name}</a>{/if}<i>&gt;</i><a href="{$obj.type|mac_url_type}">{$obj.type.type_name}</a><i>&gt;</i><a href="{$obj|mac_url_vod_detail}">{$obj.vod_name}</a></div>
+</div>
+<div class="container clearfix static">
+  <div class="row static">
+    <div class="col-md-wide-75 pt-xs-0 pr-xs-5 clearfix main-left static">
+      <div class="pannel-box p-xs-10 clearfix">
+        <h1 class="art-detail-title">{$obj.art_name}</h1>
+        <p class="art-detail-info">Thời gian：{$obj.art_time|mac_day}&nbsp;Đọc：<span class="mac_hits hits" data-id="{$obj.art_id}" data-mid="{$maccms.mid}" data-type="type">{$obj.art_hits}</span></p>
+        {if !empty($obj.art_rel_vod)}
+        <div class="art-detail-vod"> {maccms:vod rel="'.$obj['art_rel_vod'].'" by="time" order="desc"}
+          <div class="art-rel-item">
+            <div class="art-rel-cover"><a href="{$vo|mac_url_vod_detail}" style="background-image:url({$vo.vod_pic|mac_url_img})"></a></div>
+            <div class="art-rel-info">
+              <h4><a href="{$vo|mac_url_vod_detail}">{$vo.vod_name}</a></h4>
+              <p><em>Đạo diễn：</em>{$vo.vod_director|default='Không xác định'}</p>
+              <p class="art-hidden-xs"><em>Diễn viên：</em>{$vo.vod_actor|default='Không xác định'|str_replace=',','&nbsp;',###}</p>
+              <p><em>Loại：</em>{$vo.type.type_name}&nbsp;</p>
+              <p><em>Khu vực：</em>{$vo.vod_area|default='Không xác định'}&nbsp;<em>Năm：</em>{$vo.vod_year|default='Không xác định'}</p>
+              <div class="art-rel-btn"><a href="{$vo|mac_url_vod_play}">Phát ngay</a><a href="{$vo|mac_url_vod_detail}">查看详情</a></div>
+            </div>
+          </div>
+          {/maccms:vod} </div>
+        {/if}
+        <div class="art-detail-content"> {$obj.art_page_list[$param['page']]['content']|mac_url_content_img} </div>
+        {if $__PAGING__.page_total gt 1}
+        {include file="block/paging"}
+        {/if} </div>
+      {include file="block/related"}
+      {include file="block/comment"} </div>
+    <div class="col-md-wide-25 pt-xs-0 clearfix main-right hidden-sm hidden-xs ewave-sticky">
+      <div class="pannel-box clearfix">
+        <div class="box-title "><span class="iconfont icon-remen"></span>
+          <h2>Phim ảnh hot</h2>
+        </div>
+        <ul class="txt-list txt-list-hot p-xs-0">
+          {maccms:vod num="10" by="hits_month" order="desc"}
+          <li><i>{$key}</i><span class="text-color pull-right">{include file="block/status"}</span><a href="{$vo|mac_url_vod_detail}" title="{$vo.vod_name}" {if !empty($vo.vod_color)} style="color:#{$vo.vod_color}"{/if}>{$vo.vod_name}</a></li>
+          {/maccms:vod}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="block/foot"}
+</body>
+</html>

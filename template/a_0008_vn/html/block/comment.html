@@ -1,0 +1,16 @@
+{if $GLOBALS['config']['comment']['status']==1}
+      <div class="pannel-box clearfix">
+        <div class="box-title"><span class="title-lb"></span><h2>Bình luận của người dùng</h2></div>
+          <div class="ewave-pannel_bd">
+            <div class="ewave_comment" data-id="{$obj.vod_id}{$obj.art_id}{$obj.actor_id}{$obj.role_id}{$obj.website_id}{$obj.topic_id}" data-mid="{$maccms.mid}"></div>
+            <script>
+            $(function(){
+              eWave.Comment.Login = {$comment.login};
+              eWave.Comment.Verify = {$comment.verify};
+              eWave.Comment.Init();
+              eWave.Comment.Show(1);
+            });
+            </script>
+          </div>
+      </div>
+      {/if}

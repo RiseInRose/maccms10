@@ -1,0 +1,73 @@
+<form class="comment_form ewave-comment-form">
+  <input type="hidden" name="comment_pid" value="0">
+  <div class="ewave-form-group">
+    <textarea class="comment_content ewave-input-item ewave-comment-content" name="comment_content" placeholder="Hãy chia sẻ ý kiến của bạn..." rows="3"></textarea>
+  </div>
+  <div class="ewave-form-group">
+    {if condition="$comment.verify eq 1"}
+    <input class="ewave-input-item ewave-comment-verify" name="verify" type="text" placeholder="Mã xác nhận" autocomplete="off">
+    <img class="ewave-input-item ewave-comment-verify-img" src="{:mac_url('verify/index')}" title="Không nhìn rõ? Đổi cái khác！" onclick="this.src=this.src+'?'"> {/if} <input type="button" value="Đăng tải" class="comment_submit ewave-input-item ewave-submit-btn ewave-comment-submit"></div>
+</form>
+<ul class="ewave-comment-item-list">
+  {maccms:comment num="10" paging="yes" order="desc" by="id"}
+  <li class="ewave-comment-item">
+    <div class="ewave-comment-avatar"><img src="{$vo.user_id|mac_get_user_portrait}"></div>
+    <div class="ewave-comment-body">
+      <div class="ewave-comment-head">
+        <h3>{$vo.comment_name}</h3>
+        <span>{$vo.comment_time|date="Y-m-d H:i:s",###}</span> </div>
+      <div class="ewave-comment-content">{$vo.comment_content|mac_em_replace}</div>
+      <div class="ewave-comment-foot"><a class="ewave-comment-btn ewave_digg_link" data-id="{$vo.comment_id}" data-mid="4" data-type="up" href="javascript:;" title="Đỉnh"><i class="iconfont icon-ding"></i>&nbsp;<span class="digg_num">{$vo.comment_up}</span></a><a class="ewave-comment-btn ewave_digg_link" data-id="{$vo.comment_id}" data-mid="4" data-type="down" href="javascript:;" title="Bước đi"><i class=" iconfont icon-cai"></i>&nbsp;<span class="digg_num">{$vo.comment_down}</span></a><a class="ewave-comment-btn ewave-comment-reply-switch" href="javascript:;" to="#reply_form_{$vo.comment_id}"><i class="iconfont icon-liuyan"></i>&nbsp;Trả lời</a><a class="ewave-comment-btn ewave-comment-report comment_report" href="javascript:;" data-id="{$vo.comment_id}"><i class="iconfont icon-baocuo"></i>&nbsp;Báo cáo</a></div>
+      <div class="ewave-comment-reply-box">
+        <form class="comment_form ewave-comment-reply-form ewave-comment-form clearfix" id="reply_form_{$vo.comment_id}">
+          <input type="hidden" name="comment_pid" value="{$vo.comment_id}"/>
+          <div class="ewave-form-group">
+            <textarea class="comment_content ewave-input-item ewave-comment-content" name="comment_content" placeholder="Hãy chia sẻ ý kiến của bạn..." row="5"></textarea>
+          </div>
+          <div class="ewave-form-group"> {if condition="$comment.verify eq 1"}
+            <input class="ewave-input-item ewave-comment-verify" name="verify" type="text" placeholder="" autocomplete="off">
+            <img class="ewave-input-item ewave-comment-verify-img" src="{:mac_url('verify/index')}" title="Không nhìn rõ? Đổi cái khác！" onclick="this.src=this.src+'?'"> {/if}
+            <input type="button" value="Đăng tải" class="comment_submit ewave-input-item ewave-submit-btn ewave-comment-submit">
+          </div>
+        </form>
+        {if !empty($vo.sub)}
+        <ul class="ewave-comment-item-list">
+          {maccms:foreach name="$vo.sub" id="child"}
+          <li class="ewave-comment-item">
+            <div class="ewave-comment-avatar"><img src="{$child.user_id|mac_get_user_portrait}"></div>
+            <div class="ewave-comment-body">
+              <div class="ewave-comment-head">
+                <h3>{$child.comment_name}</h3>
+                <span class="hide-mobile">{$child.comment_time|date="Y-m-d H:i:s",###}</span> </div>
+              <div class="ewave-comment-content">{$child.comment_content|mac_em_replace}</div>
+              <div class="ewave-comment-foot"><a class="ewave-comment-btn ewave_digg_link" data-id="{$child.comment_id}" data-mid="4" data-type="up" href="javascript:;" title="Đỉnh"><i class="iconfont icon-ding"></i> <span class="digg_num">{$child.comment_up}</span></a><a class="ewave-comment-btn ewave_digg_link" data-id="{$child.comment_id}" data-mid="4" data-type="down" href="javascript:;" title="Bước đi"><i class="iconfont icon-cai"></i> <span class="digg_num">{$child.comment_down}</span></a><a class="ewave-comment-btn ewave-comment-report comment_report" href="javascript:;" data-id="{$child.comment_id}"><i class="iconfont icon-baocuo"></i> Báo cáo</a></div>
+            </div>
+          </li>
+          {/maccms:foreach}
+        </ul>
+        {/if} </div>
+    </div>
+  </li>
+  {/maccms:comment}
+</ul>
+{if condition="$__PAGING__.page_total gt 1"}
+<ul class="ewave-page ewave-comment-page">
+  {if $__PAGING__.page_current gt 1}
+  <li class="ewave-page-item ewave-page-item-prev"><a href="javascript:;" onClick="eWave.Comment.Show('{$__PAGING__.page_prev}');">Trang trước</a></li>
+  {/if}
+  {maccms:foreach name="$__PAGING__.page_num" id="num"}
+  {if condition="$__PAGING__.page_current == $num"}
+  <li class="ewave-page-item ewave-page-item-num active hide-mobile"><a href="javascript:;">{$num}</a></li>
+  {else/}
+  <li class="ewave-page-item ewave-page-item-num hide-mobile"><a href="javascript:;" onClick="eWave.Comment.Show('{$num}');">{$num}</a></li>
+  {/if}
+  {/maccms:foreach}
+  <li class="ewave-page-item ewave-page-item-num ewave-page-item-total active hide-pc"><span class="num">{$__PAGING__.page_current}/{$__PAGING__.page_total}</span></li>
+  {if $__PAGING__.page_current lt $__PAGING__.page_total}
+  <li class="ewave-page-item ewave-page-item-prev"><a href="javascript:;" onClick="eWave.Comment.Show('$__PAGING__.page_next}');">Trang tiếp theo</a></li>
+  {/if}
+</ul>
+{/if}
+{if condition="$__PAGING__.record_total == 0"}
+<li class="text-center" style="padding-top:10px;padding-bottom:10px;">Hiện tại không có bình luận, nhanh tay chọn chỗ ngồi!</li>
+{/if}

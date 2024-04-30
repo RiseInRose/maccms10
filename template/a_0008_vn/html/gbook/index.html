@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+{include file="block/seo"}
+{include file="block/include"}
+<script>
+$(function(){
+  eWave.Gbook.Login = {$gbook.login};
+  eWave.Gbook.Verify = {$gbook.verify};
+  eWave.Gbook.Init();
+});
+</script>
+</head>
+<body>
+{include file="block/head"}
+<div class="container">
+  <div class="row">
+    <div class="layout-box ewave-pannel ewave-pannel-bg clearfix">
+      <div class="pannel-box clearfix">
+        <div class="box-title"><span class="title-lb"></span>
+          <h2>Bình luận người dùng</h2>
+        </div>
+        <div class="col-12 ewave-pannel_bd">
+          <form class="gbook_form ewave-comment-form">
+            <div class="ewave-form-group">
+              <textarea class="gbook_content ewave-input-item ewave-comment-content" name="gbook_content" placeholder="Hãy chia sẻ ý kiến của bạn..." rows="3"></textarea>
+            </div>
+            <div class="ewave-form-group"> {if $gbook.verify eq 1}
+              <input class="ewave-input-item ewave-comment-verify" name="verify" type="text" placeholder="Mã xác nhận" autocomplete="off">
+              <img class="ewave-input-item ewave-comment-verify-img mac_verify_img" src="{:mac_url('verify/index')}" onclick="this.src = this.src+'?'" title="Nhấn để làm mới"> {/if}
+              <input type="button" value="Đăng tải" class="gbook_submit ewave-input-item ewave-submit-btn ewave-comment-submit">
+            </div>
+          </form>
+          <ul class="ewave-comment-item-list">
+            {maccms:gbook num="10" paging="yes" order="desc" by="id"}
+            <li class="ewave-comment-item">
+              <div class="ewave-comment-avatar"><img src="{$vo.user_id|mac_get_user_portrait}"></div>
+              <div class="ewave-comment-body">
+                <div class="ewave-comment-head">
+                  <h3>{$vo.gbook_name}</h3>
+                  <span>{$vo.gbook_time|mac_day}</span> </div>
+                <div class="ewave-comment-content"> {$vo.gbook_content}
+                  {if condition="$vo.gbook_reply_time gt 0"}
+                  <p style="margin-top:10px;"><strong style="color:#f00;">Phản hồi của quản trị viên：</strong>{$vo.gbook_reply}</p>
+                  {/if} </div>
+              </div>
+            </li>
+            {/maccms:gbook}
+          </ul>
+          {include file="block/paging"}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="block/foot"}
+</body>
+</html>

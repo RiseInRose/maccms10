@@ -1,0 +1,43 @@
+{if !empty($__PAGING__.record_total)}
+  <div id="page" class="mt-xs-10">
+    <ul>
+      {if $__PAGING__.page_current gt 1}
+      <li class="home"><a href="{$__PAGING__.page_url|mac_url_page=1}">Trang chủ</a></li>
+      <li class="prev"><a href="{$__PAGING__.page_url|mac_url_page=$__PAGING__.page_prev}">Trang trước</a></li>
+      {else/}
+      <li class="home disabled"><span>Trang chủ</span></li>
+      <li class="prev disabled"><span>Trang trước</span></li>
+      {/if}
+      {if ($__PAGING__.page_current gt 3) && ($__PAGING__.page_total gt 6)}
+      <li class="hidden-xs"><a href="{$__PAGING__.page_url|mac_url_page=1}">1</a></li>
+      <li class="disabled hidden-xs"><span>...</span></li>
+      {/if}
+      {maccms:foreach name="$__PAGING__.page_num" id="num"}
+      {if condition="$__PAGING__.page_current eq $num"}
+      <li class="active hidden-xs"><span>{$num}</span></li>
+      {else/}
+      <li class="hidden-xs"><a href="{$__PAGING__.page_url|mac_url_page=$num}">{$num}</a></li>
+      {/if}
+      {/maccms:foreach}
+      {if $__PAGING__.page_current lt ($__PAGING__.page_total - 4)}
+      <li class="disabled hidden-xs"><span>...</span></li>
+      <li class="hidden-xs"><a href="{$__PAGING__.page_url|mac_url_page=$__PAGING__.page_total}">{$__PAGING__.page_total}</a></li>
+      {/if}
+      <li class="visible-xs active"><span class="num">{$__PAGING__.page_current}/{$__PAGING__.page_total}</span></li>
+      {if $__PAGING__.page_current lt $__PAGING__.page_total}
+      <li class="next"><a href="{$__PAGING__.page_url|mac_url_page=$__PAGING__.page_next}">Trang tiếp theo</a></li>
+      <li class="last"><a href="{$__PAGING__.page_url|mac_url_page=$__PAGING__.page_total}">Trang cuối</a></li>
+      {else/}
+      <li class="next disabled"><span>Trang tiếp theo</span></li>
+      <li class="last disabled"><span>Trang cuối</span></li>
+      {/if}
+    </ul>
+  </div>
+  <script>
+  $("#mac_total").text({$__PAGING__.record_total});  
+  </script>
+  {else/}
+  <script>
+  $("#content").html('<div class="kong">Xin lỗi, không tìm thấy nội dung liên quan</div>');  
+  </script>
+  {/if}

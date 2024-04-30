@@ -1,0 +1,27 @@
+<div class="header">
+	<div class="layout fn-clear">
+		<div class="logo">
+			<a href="{$maccms.path}"><img height="42" src="{if !empty($maccms.site_logo)}{$maccms.site_logo|mac_url_img}{else/}{$maccms.path_tpl}user/images/member/ilogo.gif{/if}" alt=""/></a>
+		</div>
+		<ul class="nav">
+      {if !empty($user.user_id)}
+      <li class="nav-item hide-pc nav-toggle"><a class="nav-link" href="javascript:;">Điều hướng</a></li>
+      {/if}
+			<li class="nav-item"><a class="nav-link" href="{$maccms.path}">Trở vềTrang chủ</a></li>
+      {if !empty($user.user_id)}
+			<li class="nav-item"><a class="nav-link">{$user.user_name}</a></li>
+			<li class="nav-item"><a class="nav-link" href="{:mac_url('user/logout')}" >Thoát ra</a></li>
+      {/if}
+		</ul>
+	</div>
+</div>
+<div class="nav-open-bg"></div>
+<!-- // i-header end -->
+<script>
+$(".nav-toggle").click(function(){
+  $("body").toggleClass("nav-open");
+});
+$(".nav-open-bg").click(function(){
+  $("body").removeClass("nav-open");
+});
+</script>

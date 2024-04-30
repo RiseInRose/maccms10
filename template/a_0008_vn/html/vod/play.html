@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+{include file="block/seo"}
+{include file="block/include"}
+</head>
+<body>
+{include file="block/head"}
+<div class="container static">
+  <div class="layout-box top-weizhi mb-xs-10 hidden-sm hidden-xs">
+    <label>Vị trí hiện tại：</label>
+    <a href="{$maccms.path}">{$maccms.site_name}</a>{if !empty($obj.type_id_1)}<i>&gt;</i><a href="{$obj.type_1|mac_url_type}">{$obj.type_1.type_name}</a>{/if}<i>&gt;</i><a href="{$obj.type|mac_url_type}">{$obj.type.type_name}</a><i>&gt;</i><a href="{$obj|mac_url_vod_detail}">{$obj.vod_name}</a><i>&gt;</i><a href="{:mac_url_vod_play($obj,['sid'=>$param.sid,'nid'=>$param.nid])}">{$obj['vod_play_list'][$param['sid']]['urls'][$param['nid']]['name']}Xem trực tuyến</a></div>
+  <div class="vod-play-box {if !empty($obj.vod_copyright)} max{/if} clearfix">
+    <div class="col-md-wide-75 col-xs-1 p-xs-0 player-left mb-sm-0">
+      <div class="player-tipss p-xs-10 text-center">Đang phát：{$obj.vod_name}{$obj['vod_play_list'][$param['sid']]['urls'][$param['nid']]['name']}</div>
+      <div id="ewave_player" class="m-xs-0">
+        <div class="embed-responsive embed-responsive-16by9" {if !empty($obj.vod_copyright)} style="background-color:#000;"{/if}>
+        {if empty($obj.vod_copyright)}
+        {$player_data}{$player_js}
+        {else/}
+        <div class="ewave-copyright-notice player-notice">{if !empty($obj.vod_jumpurl)}<a href="{$obj.vod_jumpurl}" target="_blank">{$GLOBALS['config']['app']['copyright_notice']|default='Do vấn đề bản quyền, trang web này không cung cấp chức năng phát video'}</a>{else/}{$GLOBALS['config']['app']['copyright_notice']|default='Do vấn đề bản quyền, trang web này không cung cấp chức năng phát video'}{/if}
+        {if !empty($obj.vod_jumpurl)}<p style="text-align:center;color:#eee;"><small><b id="wait">5</b> Tự động chuyển hướng sau vài giây</small></p>{/if}
+        </div>
+        {if !empty($obj.vod_jumpurl)}
+        <script type="text/javascript">
+        (function(){
+          var wait = document.getElementById('wait'), href ='{$obj.vod_jumpurl}';
+          var interval = setInterval(function(){
+            var time = --wait.innerHTML;
+            if(time <= 0) {
+              top.location.href = href;
+              clearInterval(interval);
+            };
+          }, 1000);
+        })();
+        </script>
+        {/if}
+        {/if}
+        </div>
+      </div>
+      {if empty($obj.vod_copyright)} 
+      <div class="hidden-xs hidden-sm player-shrink iconfont icon-right" id="player-shrink"></div>
+      {/if}
+      <div class="details-tool clearfix">
+        <div class="user-bt pull-left"><a rel="nofollow" class="ewave_digg_link hidden-xs" href="javascript:void(0);" data-id="{$obj.vod_id}" data-mid="{$maccms.mid}" data-type="up"><span class="iconfont icon-ding"></span><span class="digg_num">{$obj.vod_up}</span></a><a rel="nofollow" class="ewave_digg_link hidden-xs" href="javascript:void(0);" data-id="{$obj.vod_id}" data-mid="{$maccms.mid}" data-type="down"><span class="iconfont icon-cai"></span><span class="digg_num">{$obj.vod_down}</span></a><a href="javascript:;" onclick="MAC.Gbook.Report('Số hiệu【{$obj.vod_id}】Tên【{$obj.vod_name}】Nếu không thể xem, vui lòng kiểm tra và sửa chữa, địa chỉ trang web' + location.href,'{$obj.vod_id}')">Báo lỗi</a></div>
+        <div class="user-bt pull-right mt-xs-15">
+          <a href="{$obj.player_info.link_pre|default="javascript:MAC.Pop.Msg(150,20,'Đã là tập đầu tiên rồi',1000);"}">上一集</a><a href="{$obj.player_info.link_next|default="javascript:MAC.Pop.Msg(150,20,'Bạn có chắc chắn muốn nạp tiền bằng thẻ nạp không?',1000);"}">Tập tiếp theo</a></div>
+      </div>
+    </div>
+    {if empty($obj.vod_copyright)} 
+    <div class="col-md-wide-25 col-xs-1 p-xs-0 player-right">
+      <div class="player-tips clearfix"></div>
+      <ul class="details-play-nav player-play-nav clearfix">
+        <li class="nav-tips hidden-md">Nếu không chơi được, vui lòng làm mới</li>
+        <li class="details-play-more min-play-more active moreTab pull-right" data-id="myTabDrop2"><a rel="nofollow" id="min-more" href="javascript:void(0);" class="gico {$obj['vod_play_list'][$param['sid']]['player_info']['from']}"><em class="name"> {$obj['vod_play_list'][$param['sid']]['player_info']['show']}</em><span class="iconfont icon-down"></span></a>
+          <ul class="player-more-list">
+            {maccms:foreach name="obj.vod_play_list" id="vo" key="key"}
+            <li class="tab-toggle player-tab-toggle" from="{$vo.player_info.from}" show="{$vo.player_info.show}"><a href="javascript:void(0);" class="gico {$vo.player_info.from}">{$vo.player_info.show}</a></li>
+            {/maccms:foreach}
+          </ul>
+        </li>
+      </ul>
+      <div class="details-play-list min-play-list clearfix p-sm-5 p-xs-0 tab-content">
+        {maccms:foreach name="obj.vod_play_list" id="vo" key="key"}
+        <ul class="fade-in clearfix" {if $vo.sid != $param.sid} style="display:none"{/if}>
+          {maccms:foreach name=":array_reverse($vo.urls)" id="vo2" key="key2"}
+          <li class="col-md-3 col-sm-4 col-xs-3 p-xs-5 {if $vo.sid==$param.sid && $vo2.nid==$param.nid} active{/if}" {if count($vo.urls) elt 4} style="width:auto;max-width:100%;"{/if}><a class="font12" href="{:mac_url_vod_play($obj,['sid'=>$vo.sid,'nid'=>$vo2.nid])}">{$vo2.name}</a></li>
+          {/maccms:foreach}
+        </ul>
+        {/maccms:foreach}
+      </div>
+    </div>
+    {/if}
+  </div>
+  <div class="row static">
+    <div class="col-md-wide-75 col-sm-wide-1 pt-xs-0 pr-xs-5 main-left">
+      <div class="pannel-box p-xs-10 clearfix">
+        <div class="col-md-1 col-xs-1 p-xs-10">
+          {include file="block/info"}
+        </div>
+      </div>
+      {include file="block/related"}
+      {include file="block/comment"}
+    </div>
+    <div class="col-md-wide-25 pt-xs-0 clearfix main-right hidden-sm hidden-xs" style="position:sticky;top:-10px;">
+      {include file="block/sidebar_detail"}
+    </div>
+  </div>
+</div>
+{include file="block/foot"}
+<span class="mac_hits none" data-mid="{$maccms.mid}" data-id="{$obj.vod_id}" data-type="insert"></span>
+<span class="mac_history_set hide" data-id="{$obj.vod_id}" data-name="{$obj.vod_name}" data-link="{$obj|mac_url_vod_detail}" data-playname="{$obj['vod_play_list'][$param['sid']]['urls'][$param['nid']]['name']}" data-playlink="" data-pic="{$obj.vod_pic|mac_url_img}" data-time=""></span>
+</body>
+</html>

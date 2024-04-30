@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Khôi phục mật khẩu - {$maccms.site_name} </title>
+<meta name="keywords" content="{$maccms.site_keywords}"/>
+<meta name="description" content="{$maccms.site_description}"/>
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /}
+<div class="layout clearfix">
+  <div class="reg-w">
+    <form method="post" id="fm" action="">
+      <input type="hidden" name="ac" value="{$param['ac']}">
+      <h4>{$param['ac_text']}Khôi phục mật khẩu</h4>
+      <div class="reg-group">
+        <label class="bd-r" style="letter-spacing: normal;">{$param['ac_text']}</label>
+        <input type="text" id="to" name="to" class="reg-control" placeholder="Vui lòng nhập cái bạn đã liên kết{$param['ac_text']}">
+      </div>
+      <div class="reg-group">
+        <label>Mã xác nhận</label>
+        <input type="text" class="reg-control w150" id="verify" name="verify" placeholder="Vui lòng nhập mã xác minh hình ảnh" autocomplete="off">
+        <img class="fr mr10 mt10 reg-verify-img" src="{:mac_url('verify/index')}" onClick="this.src=this.src+'?'"  alt="Nhấp để làm mới" /> </div>
+      <input type="button" id="btn_send" class="btn-brand btn-sub" style="margin-top:5px;" value="Gửi mã xác minh">
+    </form>
+    <form method="post" id="fm2" action="">
+      <input type="hidden" name="ac" value="{$param['ac']}">
+      <h4>Thông tin xác minh</h4>
+      <div class="reg-group">
+        <label class="bd-r" style="letter-spacing: normal;">Mã xác nhận</label>
+        <input type="text" id="code" name="code" class="reg-control" placeholder="Vui lòng nhập{$param['ac_text']}Mã xác nhận" autocomplete="off">
+      </div>
+      <div class="reg-group">
+        <label>Mật khẩu mới</label>
+        <input type="password" class="reg-control w150" id="user_pwd" name="user_pwd" placeholder="Vui lòng nhập mật khẩu mới">
+      </div>
+      <div class="reg-group">
+        <label>Xác nhận mật khẩu</label>
+        <input type="password" class="reg-control w150" id="user_pwd2" name="user_pwd2" placeholder="Vui lòng nhập lại mật khẩu">
+      </div>
+      <input type="button" id="btn_submit" class="btn-brand btn-sub" value="Đặt lại mật khẩu">
+    </form>
+  </div>
+  <div class="reg-another">
+    <h5>Đăng ký để tận hưởng dịch vụ thành viên</h5>
+    <h5>Phim có phí</h5>
+    <h5>Phim dành cho thành viên</h5>
+    <h5>Phim đặc biệt</h5>
+    <a href="{:mac_url('user/login')}"><i class="i-pers"></i><span>Nhớ mật khẩu? Đăng nhập ngay</span></a> <a href="{:mac_url('user/findpass')}"><i class="i-pers"></i><span>Sử dụng câu hỏi đã đặt để lấy lại mật khẩu！</span></a> <a href="{:mac_url('user/findpass_msg')}?ac=email"><i class="i-pers"></i><span>Dùng email để lấy lại mật khẩu！</span></a> <a href="{:mac_url('user/findpass_msg')}?ac=phone"><i class="i-pers"></i><span>Liên kết điện thoại để khôi phục mật khẩu！</span></a> </div>
+</div>
+
+<!-- // sign-box#regbox end --> 
+<script type="text/javascript">
+
+	$(function(){
+		$("body").bind('keyup',function(event) {
+			if(event.keyCode==13){ $('#btnLogin').click(); }
+		});
+		$('#btn_send').click(function() {
+			if ($('#to').val()  == '') { MAC.Pop.Msg(300, 20, '请输入{$param["ac_text"]}！', 2000); $("#to").focus(); return false; }
+
+			$.ajax({
+				url: "{:mac_url('user/findpass_msg')}",
+				type: "post",
+				dataType: "json",
+				data: $('#fm').serialize(),
+				beforeSend: function () {
+					$("#btn_send").css("background","#fd6a6a").val("loading...");
+				},
+				success: function (r) {
+					MAC.Pop.Msg(300, 20, r.msg, 2000);
+				},
+				complete: function () {
+					$('#verify').click();
+					$("#btn_send").css("background","#fa4646").val("Gửi email");
+				}
+			});
+		});
+
+		$('#btn_submit').click(function() {
+			if ($('#to').val()  == '') { MAC.Pop.Msg(300, 20, '请输入{$param["ac_text"]}', 2000); $("#to").focus(); return false; }
+			if ($('#code').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập mã xác minh！', 2000); $("#code").focus(); return false; }
+			if ($('#user_pwd').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập mật khẩu mới！', 2000); $("#user_pwd").focus(); return false; }
+			if ($('#user_pwd2').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập lại mật khẩu！', 2000); $("#user_pwd2").focus(); return false; }
+			if ($('#user_pwd').val()  != $('#user_pwd2').val() ) { MAC.Pop.Msg(300, 20, 'Mật khẩu nhập lại không khớp！', 2000); $("#user_pwd2").focus(); return false; }
+
+			var data= {ac:'{$param["ac"]}',to:$('#to').val(),code:$('#code').val(),user_pwd:$('#user_pwd').val(),user_pwd2:$('#user_pwd2').val()};
+			$.ajax({
+				url: "{:mac_url('user/findpass_reset')}",
+				type: "post",
+				dataType: "json",
+				data: data,
+				beforeSend: function () {
+					$("#btn_submit").css("background","#fd6a6a").val("loading...");
+				},
+				success: function (r) {
+					MAC.Pop.Msg(300, 20, r.msg, 2000);
+				},
+				complete: function () {
+					$("#btn_submit").css("background","#fa4646").val("Đặt lại mật khẩu");
+				}
+			});
+		});
+	});
+
+</script> 
+{include file="user/foot" /}
+</body>
+</html>

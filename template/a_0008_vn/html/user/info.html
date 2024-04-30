@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Thay đổi thông tin cá nhân - Trung tâm thành viên - {$maccms.site_name}</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /} 
+<!-- Trung tâm thành viên -->
+<div id="member" class="fn-clear">
+  {include file="user/left"}
+  <div id="right">
+    <h2>Thông tin của tôi</h2>
+    <div id="tab">
+      <div class="list">
+        <ul class="fn-clear">
+          <li><a href="{:mac_url('user/index')}">Thông tin cơ bản</a></li>
+          <li class="cur">Chỉnh sửa thông tin</li>
+          <li><a href="{:mac_url('user/popedom')}">Quyền hạn của tôi</a></li>
+        </ul>
+      </div>
+      <div id="listCon"> 
+        
+        <!-- Chỉnh sửa thông tin -->
+        <div class="cur">
+          <form id="fm" name="fm" method="post" action="" >
+            <p><span class="xiang">Tên người dùng：</span>{$obj.user_name}</p>
+            <p><span class="xiang">Biệt danh：</span>
+              <input type="text" name="user_nick_name" class="member-input" value="{$obj.user_nick_name}">
+            </p>
+            <p><span class="xiang">Mật khẩu gốc：</span>
+              <input type="password" name="user_pwd" class="member-input">
+            </p>
+            <p><span class="xiang">Mật khẩu mới：</span>
+              <input type="password" name="user_pwd1" class="member-input" placeholder="不修改请留空">
+            </p>
+            <p><span class="xiang">Mật khẩu lặp lại：</span>
+              <input type="password" name="user_pwd2" class="member-input" placeholder="不修改请留空">
+            </p>
+            <p><span class="xiang">Số QQ：</span>
+              <input type="text" name="user_qq" class="member-input" value="{$obj.user_qq}">
+            </p>
+            {if condition="$obj.user_email neq ''"}
+            <p style="position: relative;"><span class="xiang">Email：</span>
+              <input type="text" name="user_email" class="member-input" readonly="readonly" value="{$obj.user_email}">
+              <a class="btn_unbind reg-verify-btn reg-verify-btn2" ac="email" href="javascript:;">Bỏ liên kết</a></p>
+            {else/}
+            <p style="position: relative;"><span class="xiang">Email：</span>
+              <input type="text" name="user_email" class="member-input" value="">
+              <a class="reg-verify-btn reg-verify-btn2" href="{:mac_url('user/bind')}?ac=email">Liên kết</a></p>
+            {/if}
+            
+            {if condition="$obj.user_phone neq ''"}
+            <p style="position: relative;"><span class="xiang">Điện thoại di động：</span>
+              <input type="text" name="user_phone" class="member-input" readonly="readonly" value="{$obj.user_phone}">
+              <a class="btn_unbind reg-verify-btn reg-verify-btn2" ac="phone" href="javascript:;">Bỏ liên kết</a></p>
+            {else/}
+            <p style="position: relative;"><span class="xiang">Điện thoại di động：</span>
+              <input type="text" name="user_phone" class="member-input" value="">
+              <a class="reg-verify-btn reg-verify-btn2" href="{:mac_url('user/bind')}?ac=phone">Liên kết</a></p>
+            {/if}
+            <p><span class="xiang">Câu hỏi lấy lại mật khẩu：</span>
+              <input type="text" name="user_question" class="member-input" value="{$obj.user_question}">
+            </p>
+            <p><span class="xiang">Tìm câu trả lời cho mật khẩu：</span>
+              <input type="text" name="user_answer" class="member-input" value="{$obj.user_answer}">
+            </p>
+            <p><span class="xiang"></span>
+              <input type="button" id="btn_submit" class="search-button" value="Lưu">
+              <span class="wjmm"><a href="{if $GLOBALS.config.user.reg_phone_sms != 0}{:mac_url('user/findpass_msg')}?ac=phone{elseif $GLOBALS.config.user.reg_email_sms !=0/}{:mac_url('user/findpass_msg')}?ac=email{else/}{:mac_url('user/findpass')}{/if}">Quên mật khẩu了？</a></span></p>
+            <p><span class="xiang"></span></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $("#left li.user-left-index").addClass('hover');
+	$('.btn_unbind').click(function(){
+		var ac = $(this).attr('ac');
+		if(ac!='email' && ac!='phone'){
+			MAC.Pop.Msg(300, 20, 'Lỗi tham số', 2000);
+		}
+		if(confirm('Xác nhận gỡ bỏ ràng buộc không? Hoạt động này không thể khôi phục?')) {
+			$.ajax({
+				url: "{:mac_url('user/unbind')}",
+				type: "post",
+				dataType: "json",
+				data: {ac: ac},
+				beforeSend: function () {
+					//开启loading
+				},
+				success: function (r) {
+					MAC.Pop.Msg(300, 20, r.msg, 2000);
+					if(r.code==1){
+						location.href="{:mac_url('user/info')}";
+					}
+				},
+				complete: function () {
+					//结束loading
+				}
+			});
+		}
+	});
+
+	$("#btn_submit").click(function() {
+		var data = $("#fm").serialize();
+		$.ajax({
+			url: "{:mac_url('user/info')}",
+			type: "post",
+			dataType: "json",
+			data: data,
+			beforeSend: function () {
+				//开启loading
+				//$(".loading_box").css("display","block");
+				$("#btn_submit").css("background","#fd6a6a").val("loading...");
+			},
+			success: function (r) {
+				MAC.Pop.Msg(300, 20, r.msg, 2000);
+				if(r.code==1){
+					location.href="{:mac_url('user/info')}";
+				}
+			},
+			complete: function () {
+				//结束loading
+				//$(".loading_box").css("display","none");
+				$("#btn_submit").css("background","#fa4646").val("Gửi đi");
+			}
+		});
+	});
+
+</script> 
+{include file="user/foot" /}
+</body>
+</html>

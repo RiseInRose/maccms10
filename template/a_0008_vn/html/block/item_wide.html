@@ -1,0 +1,3 @@
+<a class="img-pic thumb pic60 lazyload" href="{$vo|mac_url_vod_detail}" title="{$vo.vod_name}" data-original="{if !empty($vo.vod_pic_slide)}{$vo.vod_pic_slide|mac_url_img}{else/}{$vo.vod_pic|mac_url_img}{/if}"><span class="iconfont icon-play play hidden-xs"></span>{if $vo.vod_score gt 0}<span class="score">{$vo.vod_score}</span>{/if}<span class="vname">{$vo.vod_name}</span><span class="vtitle text-right">{include file="block/status"}</span></a>
+          <div class="name text-overflow"><a href="{$vo|mac_url_vod_detail}" title="{$vo.vod_name}" {if !empty($vo.vod_color)} style="color:#{$vo.vod_color}"{/if}>{$vo.vod_name}</a></div>
+          <div class="sname text-muted text-overflow hidden">{$vo.vod_actor|str_replace=',','&nbsp;',###}</div>

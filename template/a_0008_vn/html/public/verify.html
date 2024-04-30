@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<title>Xác minh an ninh hệ thống</title>
+{include file="block/include"}
+<style>
+.mac_verify_img {
+  padding: 7px 0px;
+  border-radius: 3px;
+  padding-left: 5px;
+}
+</style>
+<script>
+$(function(){
+  $('.mac_verify').focus();
+  $("input[name='verify']").bind('keypress',function(event){
+    if(event.keyCode == "13") {
+      if($("input[name='verify']").val()!=''){
+        $('.verify_submit').click();
+      }
+    }
+  });
+  $('.verify_submit').click(function(){
+    var v = $('input[name="verify"]').val();
+    MAC.Ajax(maccms.path+'/index.php/ajax/verify_check?type={$type}&verify='+v,'post','json','',function(r){
+      if(r.code==1){
+        location.reload();
+      }else{
+        MAC.Pop.Msg(300, 20, r.msg, 2000);
+        MAC.Verify.Refresh();
+      }
+    },function(){
+      MAC.Pop.Msg(300, 20, '请求失败，请重试', 2000);
+      MAC.Verify.Refresh();
+    });
+  });
+});
+</script>
+</head>
+<body>
+{include file="block/head"}
+<div class="mac_msg_jump">
+  <div class="msg_jump_tit">Xác minh an toàn...</div>
+  <div class="title text">Vui lòng nhập mã xác minh：</div>
+  <div class="text">
+    <input type="text" name="verify" class="mac_verify ewave-input-item ewave-verify" autocomplete="off">
+  </div>
+  <div class="jump text">
+    <input type="button" class="verify_submit submit_btn ewave-input-item ewave-submit-btn" value="Nộp xác minh" style="padding-right:5px;">
+  </div>
+</div>
+{include file="block/foot"}
+</body>
+</html>

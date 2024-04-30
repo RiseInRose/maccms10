@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+{include file="block/seo"}
+{include file="block/include"}
+</head>
+<body>
+{include file="block/head"}
+<div class="container">
+  <div class="index-slide-box color">
+    <div class="box-slide" id="box-slide-1">
+      <ul class="swiper-wrapper img-list">
+        {maccms:vod level="9" num="5" by="time" order="desc"}
+        <li class="swiper-slide"><a class="img-pic islide swiper-lazy" href="{$vo|mac_url_vod_detail}" title="{$vo.vod_name}" data-background="{if !empty($vo.vod_pic_slide)}{$vo.vod_pic_slide|mac_url_img}{else/}{$vo.vod_pic|mac_url_img}{/if}">
+          <div class="slide-tite"><span class="slide-name">{$vo.vod_name}</span><span class="slide-text">[{include file="block/status"}]<em></em></span></div>
+          <div class="swiper-lazy-preloader"></div>
+          </a></li>
+        {/maccms:vod}
+      </ul>
+      <div class="swiper-pagination hidden-xs" style="bottom:15px"></div>
+      <div class="index-page swiper-button-next top40 hidden-xs"></div>
+      <div class="index-page swiper-button-prev top40 hidden-xs"></div>
+    </div>
+  </div>
+  <div class="layout-box">
+    <div class="box-title"><span class="iconfont icon-remen"></span>
+      <h2>PHIM HOT</h2>
+    </div>
+    <div class="row">
+      <ul class="img-list col-md-wide-12 col-sm-wide-1 col-xs-1 p-sm-0 p-xs-5">
+        {maccms:vod num="10" by="hits_week" order="desc"}
+        <li class="col-md-5 col-sm-3 col-xs-2 pb-xs-0 {if $key==10} hidden-sm{/if}">
+          {include file="block/item_wide"}
+        </li>
+        {/maccms:vod}
+      </ul>
+    </div>
+  </div>
+  {maccms:type ids="parent" flag="vod" by="sort" order="asc" id="type" key="key_type"}
+  <div class="layout-box">
+    <div class="box-title"><span class="iconfont {if $type.type_id==2} icon-tv{elseif $type.type_id==3/} icon-zongyi{elseif $type.type_id==4} icon-dongman{else/} icon-mov{/if}"></span>
+      <h2>{$type.type_name}</h2>
+      <a class="box-more pull-right" href="{$type|mac_url_type}">Thêm<i>&gt;</i></a>
+      <div class="box-nav pull-right hidden-xs">{maccms:type ids="child" num="8" parent="'.$type['type_id'].'" by="sort" order="asc"}{if $key gt 1}<i>/</i>{/if}<a href="{$vo|mac_url_type}" title="{$vo.type_name}">{$vo.type_name}</a>{/maccms:type}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-wide-75 col-xs-1 p-xs-0 {if $key_type gt 2} pull-right{/if}">
+        <ul class="img-list clearfix">
+          {maccms:vod num="10" type="'.$type['type_id'].'" by="time" order="desc"}
+          <li class="col-md-5 col-sm-4 col-xs-3 {if $key gt 8} hidden-sm{/if}{if $key gt 9} hidden-xs{/if}"> {include file="block/item"} </li>
+          {/maccms:vod}
+        </ul>
+      </div>
+      <div class="col-md-wide-25 pt-xs-0 hidden {if $key_type gt 2} pull-left{/if}">
+        <div class="box-title mb-xs-0 mt-xs-5 hidden-sm hidden-xs"><span class="title-lb pr-xs-5 ml-xs-5"></span>
+          <h2>Phát sóng nổi bật trong tuần này</h2>
+          <a class="box-more pull-right" href="{:mac_url('label/top')}">Thêm<i>&gt;</i></a></div>
+        <ul class="txt-list txt-list-hot p-xs-0 hidden-sm hidden-xs">
+          {maccms:vod num="15" type="'.$type['type_id'].'" by="hits_week" order="desc"}
+          <li {if $key gt 5} class="hidden-md"{/if}><i>{$key}</i><span class="text-color pull-right">{include file="block/status"}</span><a href="{$vo|mac_url_vod_detail}" title="{$vo.vod_name}" {if !empty($vo.vod_color)} style="color:#{$vo.vod_color}"{/if}>{$vo.vod_name}</a></li>
+          {/maccms:vod}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {/maccms:type}
+  <div class="layout-box hidden-sm hidden-xs">
+    <div class="box-title"><span class="iconfont icon-link"></span><span class="font16">Kết nối</span></div>
+    <div class="row">
+      <ul>
+        {maccms:link num="120" by="sort" order="asc"}
+        <li class="col-md-10 col-sm-6 col-xs-3"><a href="{$vo.link_url}" target="_blank">{$vo.link_name}</a></li>
+        {/maccms:link}
+      </ul>
+    </div>
+  </div>
+</div>
+{include file="block/foot"}
+</body>
+</html>

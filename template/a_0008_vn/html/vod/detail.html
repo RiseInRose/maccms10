@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+{include file="block/seo"}
+{include file="block/include"}
+<script src="{$maccms.path_tpl}js/jquery.raty.js"></script>
+</head>
+<body>
+{include file="block/head"}
+<div class="container">
+  <div class="layout-box top-weizhi mb-xs-10 hidden-sm hidden-xs">
+    <label>Vị trí hiện tại：</label>
+    <a href="{$maccms.path}">{$maccms.site_name}</a>{if !empty($obj.type_id_1)}<i>&gt;</i><a href="{$obj.type_1|mac_url_type}">{$obj.type_1.type_name}</a>{/if}<i>&gt;</i><a href="{$obj.type|mac_url_type}">{$obj.type.type_name}</a><i>&gt;</i><a href="{$obj|mac_url_vod_detail}">{$obj.vod_name}</a></div>
+</div>
+<div class="container clearfix static">
+  <div class="row static">
+    <div class="col-md-wide-75 pt-xs-0 pr-xs-5 clearfix main-left static">
+      <div class="pannel-box p-xs-10 clearfix">
+        {include file="block/info"}
+      </div>
+      {if !empty($obj.vod_play_list) && (empty($obj.vod_copyright) || $GLOBALS.config.app.copyright_status gt 2)}
+      <div class="pannel-box p-xs-0">
+        <div class="details-play-title clearfix playlist-slide">
+          <ul class="swiper-wrapper details-play-nav clearfix">
+            {php}$playlist_num=1;{/php}
+            {maccms:foreach name="obj.vod_play_list" id="vo" key="key"}
+            <li class="swiper-slide play-list-toggle tab-toggle {if $playlist_num==1} active{/if}"><a class="gico {$vo.player_info.from}" href="javascript:void(0);">{$vo.player_info.show}</a></li>
+            {php}$playlist_num++;{/php}
+            {/maccms:foreach}
+          </ul>
+        </div>
+      </div>
+      <div class="pannel-box mt-xs-0">
+        <div class="details-play-list clearfix p-sm-5 p-xs-5 tab-content">
+          {php}$playlist_num=1;{/php}
+          {maccms:foreach name="obj.vod_play_list" id="vo" key="key"}
+          <ul class="play-list fade-in clearfix" {if $playlist_num != 1} style="display:none"{/if}>
+            {maccms:foreach name=":array_reverse($vo.urls)" id="vo2" key="key2"}
+            <li class="col-lg-8 col-md-6 col-sm-5 col-xs-4 p-xs-5 {if $vo.url_count lt 8} ewave-width-auto{/if} {if (count($vo.urls) gt 24) && ($key2 gt 18) && ($key2 lt (count($vo.urls)-4))} js-ep-show hided{/if}" {if count($vo.urls) lt 4} style="width:auto;max-width:100%;"{/if}><a href="{:mac_url_vod_play($obj,['sid'=>$vo.sid,'nid'=>$vo2.nid])}">{$vo2.name}</a></li>
+            {if count($vo.urls) gt 24}
+            {if $key2 == 18}
+            <li class="col-lg-8 col-md-6 col-sm-5 col-xs-4 p-xs-5 js-ep-show more open"><a href="javascript:void(0)">Thêm剧集</a></li>
+            {/if}
+            {if $key2 == count($vo.urls)-1}
+            <li class="col-lg-8 col-md-6 col-sm-5 col-xs-4 p-xs-5 js-ep-show more open hided"><a href="javascript:void(0)">收起剧集</a></li>
+            {/if}
+            {/if}
+            {php}$playlist_num++;{/php}
+            {/maccms:foreach}
+          </ul>
+          {/maccms:foreach} 
+        </div>
+      </div>
+      {else/}
+      <div class="ewave-copyright-notice">{if !empty($obj.vod_jumpurl)}<a href="{$obj.vod_jumpurl}" target="_blank">{$GLOBALS['config']['app']['copyright_notice']|default='Do vấn đề bản quyền, trang web này không cung cấp chức năng phát video'}</a>{else/}{$GLOBALS['config']['app']['copyright_notice']|default='Do vấn đề bản quyền, trang web này không cung cấp chức năng phát video'}{/if}</div>
+      {/if}
+      {include file="block/related"}
+      {include file="block/comment"}
+    </div>
+    <div class="col-md-wide-25 pt-xs-0 clearfix main-right hidden-sm hidden-xs ewave-sticky" style="top:-50px;">
+      {include file="block/sidebar_detail"}
+    </div>
+  </div>
+</div>
+{include file="block/foot"}
+<span class="mac_hits none" data-mid="{$maccms.mid}" data-id="{$obj.vod_id}" data-type="insert"></span>
+</body>
+</html>

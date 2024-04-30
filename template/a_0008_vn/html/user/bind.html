@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Dữ liệu liên kết - Trung tâm thành viên - {$maccms.site_name}</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /} 
+<!-- Trung tâm thành viên -->
+<div id="member" class="fn-clear"> 
+  {include file="user/left"}
+  <div id="right">
+    <h2>Thông tin của tôi</h2>
+    <div id="tab">
+      <div class="list">
+        <ul class="fn-clear">
+          <li class="cur">Liên kết{if condition="$ac eq 'phone'"}Điện thoại di động{else/}Email{/if}</li>
+        </ul>
+      </div>
+      <div id="listCon"> 
+        <!-- Chỉnh sửa thông tin -->
+        <div class="cur">
+          <form id="fm" name="fm" method="post" action="" >
+            <input type="hidden" name="ac" value="{$ac}">
+            <p style="position:relative;"><span class="xiang">{if condition="$ac eq 'phone'"}Điện thoại di động{else/}Email{/if}：</span>
+              <input type="text" name="to" class="member-input" value="">
+              <input type="button" class="reg-verify-btn reg-verify-btn2" id="btn_bind_send" value="Nhận mã xác nhận"/>
+            </p>
+            <p><span class="xiang">{if condition="$ac eq 'phone'"}Điện thoại di động{else/}Email{/if}Mã xác nhận：</span>
+              <input type="text" name="code" class="member-input" value="" autocomplete="off">
+            </p>
+            <p><span class="xiang"></span>
+              <input type="button" id="btn_submit" class="search-button" value="Xác nhận liên kết">
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$("#left li.user-left-index").addClass('hover');
+var countdown = 60;
+function settime(val) {
+  if (countdown == 0) {
+    val.removeAttribute("disabled");
+    val.value = "Nhận mã xác nhận";
+    countdown = 60;
+    return true;
+  } else {
+    val.setAttribute("disabled", true);
+    val.value = "Gửi lại(" + countdown + ")";
+    countdown--;
+  }
+  setTimeout(function () {
+    settime(val)
+  }, 1000)
+}
+
+$('#btn_bind_send').click(function () {
+  var ac = $('input[name="ac"]').val();
+  var to = $('input[name="to"]').val();
+  if (ac == 'email') {
+    var pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+    var ex = pattern.test(to);
+    if (!ex) {
+      MAC.Pop.Msg(300, 20, 'Định dạng email không đúng', 2000);
+      return;
+    }
+  } else if (ac == 'phone') {
+    var pattern = /^[1][0-9]{10}$/;
+    var ex = pattern.test(to);
+    if (!ex) {
+      MAC.Pop.Msg(300, 20, 'Định dạng số điện thoại không đúng', 2000);
+      return;
+    }
+  } else {
+    MAC.Pop.Msg(300, 20, 'Lỗi tham số', 2000);
+    return;
+  }
+
+
+  settime(this);
+  var data = $("#fm").serialize();
+
+  $.ajax({
+    url: "{:mac_url('user/bindmsg')}",
+    type: "post",
+    dataType: "json",
+    data: data,
+    beforeSend: function () {
+      //开启loading
+    },
+    success: function (r) {
+      MAC.Pop.Msg(300, 20, r.msg, 2000);
+    },
+    complete: function () {
+      //结束loading
+    }
+  });
+});
+
+$("#btn_submit").click(function () {
+  var ac = $('input[name="ac"]').val();
+  var to = $('input[name="to"]').val();
+
+  if (ac == 'email') {
+    var pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+    var ex = pattern.test(to);
+    if (!ex) {
+      MAC.Pop.Msg(300, 20, 'Định dạng email không đúng', 2000);
+      return;
+    }
+  } else if (ac == 'phone') {
+    var pattern = /^[1][0-9]{10}$/;
+    var ex = pattern.test(to);
+    if (!ex) {
+
+      MAC.Pop.Msg(300, 20, 'Định dạng số điện thoại không đúng', 2000);
+      return;
+    }
+  } else {
+    MAC.Pop.Msg(300, 20, 'Lỗi tham số', 2000);
+    return;
+  }
+
+  var code = $('input[name="code"]').val();
+  if (code == '') {
+    MAC.Pop.Msg(300, 20, 'Vui lòng nhập mã xác minh', 2000);
+    return;
+  }
+  var data = $("#fm").serialize();
+
+  $.ajax({
+    url: "{:mac_url('user/bind')}",
+    type: "post",
+    dataType: "json",
+    data: data,
+    beforeSend: function () {
+      //开启loading
+      //$(".loading_box").css("display","block");
+      $("#btn_submit").val("loading...");
+    },
+    success: function (r) {
+      MAC.Pop.Msg(300, 20, r.msg, 2000);
+      if (r.code == 1) {
+        location.href = "{:mac_url('user/info')}";
+      }
+    },
+    complete: function () {
+      //结束loading
+      //$(".loading_box").css("display","none");
+      $("#btn_submit").val("Gửi đi");
+    }
+  });
+});
+</script> 
+{include file="user/foot" /}
+</body>
+</html>

@@ -1,0 +1,36 @@
+<div id="left">
+    <div class="tou"><img class="face" src="{$obj.user_portrait|mac_default='static/images/touxiang.png'|mac_url_img}" alt="会员头像">
+      <p>{$user.user_name}<br />
+        {$user.group.group_name}</p>
+    </div>
+    <script>
+      $(function(){
+        $(".face").imageUpload({
+          formAction: "{:mac_url('user/portrait')}",
+          inputFileName:'file',
+          browseButtonValue: 'Thay đổi ảnh đại diện',
+          browseButtonClass:'btn btn-default btn-xs',
+          automaticUpload: true,
+          hideDeleteButton: true,
+          hover:true
+        })
+        $(".face").on("imageUpload.uploadFailed", function (ev, err) {
+          console.log(err);
+          location.reload();
+        });
+      });
+    	
+    </script>
+    <ul>
+      <li class="user-left-index"><a href="{:mac_url('user/index')}">Thông tin của tôi</a></li>
+      <li class="user-left-favs"><a href="{:mac_url('user/favs')}">Bộ sưu tập của tôi</a></li>
+      <li class="user-left-plays"><a href="{:mac_url('user/plays')}">Lịch sử phát lại</a></li>
+      <li class="user-left-downs"><a href="{:mac_url('user/downs')}">Lịch sử tải xuống</a></li>
+      <li class="user-left-buy"><a href="{:mac_url('user/buy')}">Nạp tiền trực tuyến</a></li>
+      <li class="user-left-upgrade"><a href="{:mac_url('user/upgrade')}">Nâng cấp thành viên</a></li>
+      <li class="user-left-orders"><a href="{:mac_url('user/orders')}">Lịch sử nạp tiền</a></li>
+      <li class="user-left-plog"><a href="{:mac_url('user/plog')}">Ghi chép điểm</a></li>
+      <li class="user-left-cash"><a href="{:mac_url('user/cash')}">Lịch sử rút tiền</a></li>
+      <li class="user-left-reward"><a href="{:mac_url('user/reward')}">Phân phối cấp 3</a></li>
+    </ul>
+  </div>

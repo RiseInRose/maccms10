@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+{include file="block/seo"}
+{include file="block/include"}
+</head>
+<body>
+{include file="block/head"}
+<div class="container">
+  <div class="layout-box top-weizhi mb-xs-0 hidden-sm hidden-xs">
+    <label>Vị trí hiện tại：</label>
+    <a href="{$maccms.path}">{$maccms.site_name}</a>{if !empty($obj.type_pid)}<i>&gt;</i><a href="{$obj.parent|mac_url_type}">{$obj.parent.type_name}</a>{/if}<i>&gt;</i><a href="{$obj|mac_url_type}">{$obj.type_name}</a></div>
+
+  <div class="layout-box">
+    <div class="box-title"><span class="title-lb"></span>
+      <h2>{$obj.type_name}</h2>
+      </div>
+    <div class="row">
+      <div class="col-md-1 p-xs-0">
+        <ul class="art-list">
+            {maccms:art num="24" paging="yes" by="time" order="desc"}
+            <li class="art-item"><a href="{$vo|mac_url_art_detail}">
+              <div class="art-item-cover" style="background-image:url({$vo.art_pic|mac_url_img});" title="{$vo.art_name}"></div>
+              <p class="art-item-title">{$vo.art_name}</p>
+              </a> </li>
+            {/maccms:art}
+          </ul>
+      </div>
+    </div>
+    {include file="block/paging"}
+  </div>
+
+</div>
+{include file="block/foot"}
+</body>
+</html>

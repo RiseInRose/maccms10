@@ -1,0 +1,42 @@
+<div class="pannel-box clearfix">
+        <div class="box-title"> <span class="title-lb"></span>
+          <h2>Bạn có thể thích</h2>
+        </div>
+        <ul class="img-list clearfix">
+          {php}
+          $related_num=10;
+          $rel_num=0;
+          $my_key=1;
+          $related_id=$obj['vod_id'];
+          if (!empty($obj['vod_rel_vod'])){
+            $rel_num=count(explode(',',$obj['vod_rel_vod']));
+            if ($rel_num > $related_num) {
+              $rel_num=$related_num;
+            }
+            $related_num-=$rel_num;
+          }
+          {/php}
+          {if !empty($rel_num)}
+          {maccms:vod num="'.$rel_num.'" rel="'.$obj['vod_rel_vod'].'"}
+          {if $vo.vod_id != $obj.vod_id}
+          <li class="col-md-5 col-sm-4 col-xs-3 {if $my_key gt 8} hidden-sm{/if}{if $my_key gt 9} hidden-xs{/if}"> {include file="block/item"} </li>
+          {php}$related_id.=",".$vo['vod_id'];$my_key++;{/php}
+          {else/}
+          {php}$rel_num--;$related_num++;{/php}
+          {/if}
+          {/maccms:vod}
+          {/if}
+          {if !empty($related_num)}
+          {maccms:vod num="'.$related_num.'" not="'.$related_id.'" type="current" by="hits_week" order="desc"}
+          <li class="col-md-5 col-sm-4 col-xs-3 {if $my_key gt 8} hidden-sm{/if}{if $my_key gt 9} hidden-xs{/if}"> {include file="block/item"} </li>
+          {php}$related_id.=",".$vo['vod_id'];$rel_num++;$related_num--;$my_key++;{/php}
+          {/maccms:vod}
+          {/if}
+          {if !empty($related_num)}
+          {maccms:vod num="'.$related_num.'" not="'.$related_id.'" by="hits_week" order="desc"}
+          <li class="col-md-5 col-sm-4 col-xs-3 {if $my_key gt 8} hidden-sm{/if}{if $my_key gt 9} hidden-xs{/if}"> {include file="block/item"} </li>
+          {php}$related_id.=",".$vo['vod_id'];$rel_num++;$related_num--;$my_key++;{/php}
+          {/maccms:vod}
+          {/if}
+        </ul>
+      </div>

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Đăng ký người dùng - {$maccms.site_name}</title>
+<meta name="keywords" content="{$maccms.site_keywords}"/>
+<meta name="description" content="{$maccms.site_description}"/>
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /}
+<div class="layout clearfix">
+  <div class="reg-w">
+    <form method="post" id="fm" action="">
+      <h4>Đăng ký người dùng</h4>
+      <div class="reg-group">
+        <label class="bd-r" style="letter-spacing: normal;">Tài khoản</label>
+        <input type="text" id="user_name" name="user_name" class="reg-control" placeholder="Vui lòng nhập tài khoản đăng nhập của bạn">
+      </div>
+      <div class="reg-group">
+        <label>Mật khẩu</label>
+        <input type="password" id="user_pwd" name="user_pwd" class="reg-control" placeholder="Vui lòng nhập mật khẩu đăng nhập của bạn">
+      </div>
+      <div class="reg-group">
+        <label>Xác nhận mật khẩu</label>
+        <input type="password" id="user_pwd2" name="user_pwd2" class="reg-control" placeholder="Vui lòng nhập lại mật khẩu của bạn">
+      </div>
+      {if condition="$user_config.reg_phone_sms neq 0"}
+      <input type="hidden" name="ac" value="phone">
+      <div class="reg-group">
+        <label>Số điện thoại</label>
+        <input type="text" class="reg-control w150" id="to" name="to" placeholder="Vui lòng nhập số điện thoại">
+        <input type="button" class="fr mr10 mt10 reg-verify-btn" id="btn_send_sms" value="Nhận mã xác nhận"/>
+      </div>
+      <div class="reg-group">
+        <label>Mã xác thực điện thoại</label>
+        <input type="text" class="reg-control w150" id="code" name="code" placeholder="Vui lòng nhập mã xác minh điện thoại di động" autocomplete="off">
+      </div>
+      {elseif condition="$user_config.reg_email_sms neq 0"}
+      <input type="hidden" name="ac" value="email">
+      <div class="reg-group">
+        <label>Địa chỉ email</label>
+        <input type="text" class="reg-control w150" id="to" name="to" placeholder="Vui lòng nhập email">
+        <input type="button" class="fr mr10 mt10 reg-verify-btn" id="btn_send_sms" value="Nhận mã xác nhận"/>
+      </div>
+      <div class="reg-group">
+        <label>Mã xác minh email</label>
+        <input type="text" class="reg-control w150" id="code" name="code" placeholder="Vui lòng nhập mã xác minh email" autocomplete="off">
+      </div>
+      {/if}
+      
+      {if condition="$user_config.reg_verify neq 0"}
+      <div class="reg-group">
+        <label>验证码</label>
+        <input type="text" class="reg-control w150" id="verify" name="verify" placeholder="Vui lòng nhập mã xác minh hình ảnh" autocomplete="off">
+        <img class="fr mr10 mt10 reg-verify-img" id="verify_img" src="{:mac_url('verify/index')}" onClick="this.src=this.src+'?'"  alt="Nhấp để làm mới" /> </div>
+      {/if}
+      <input type="button" id="btn_submit" class="btn-brand btn-sub" value="Đăng ký ngay">
+    </form>
+  </div>
+  <div class="reg-another"> <a href="{:mac_url('user/login')}"><i class="i-pers"></i><span>Đã có tài khoản? Đăng nhập trực tiếp</span></a> </div>
+</div>
+
+<!-- // sign-box#regbox end --> 
+<script type="text/javascript">
+
+    var countdown=60;
+    function settime(val) {
+        if (countdown == 0) {
+            val.removeAttribute("disabled");
+            val.value="Nhận mã xác nhận";
+            countdown = 60;
+            return true;
+        } else {
+            val.setAttribute("disabled", true);
+            val.value="Gửi lại(" + countdown + ")";
+            countdown--;
+        }
+        setTimeout(function() {settime(val) },1000)
+    }
+
+
+		$("body").bind('keyup',function(event) {
+			if(event.keyCode==13){ $('#btnLogin').click(); }
+		});
+
+        $('#btn_send_sms').click(function(){
+            var ac = $('input[name="ac"]').val();
+            var to = $('input[name="to"]').val();
+            if(ac=='email') {
+                var pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                var ex = pattern.test(to);
+                if (!ex) {
+                    MAC.Pop.Msg(300, 20, 'Định dạng email không đúng', 2000);
+                    return;
+                }
+            }
+            else if(ac=='phone') {
+                var pattern=/^[1][0-9]{10}$/;
+                var ex = pattern.test(to);
+                if (!ex) {
+                    MAC.Pop.Msg(300, 20, 'Định dạng số điện thoại không đúng', 2000);
+                    return;
+                }
+            }
+            else{
+                MAC.Pop.Msg(300, 20, '参数错误', 2000);
+                return;
+            }
+
+
+            settime(this);
+            var data = $("#fm").serialize();
+
+            $.ajax({
+                url: "{:mac_url('user/reg_msg')}",
+                type: "post",
+                dataType: "json",
+                data: data,
+                beforeSend: function () {
+                    //开启loading
+                },
+                success: function (r) {
+                    MAC.Pop.Msg(300, 20, r.msg, 2000);
+                },
+                complete: function () {
+                    //结束loading
+                }
+            });
+        });
+
+		$('#btn_submit').click(function() {
+			if ($('#user_name').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập người dùng！', 2000); $("#user_name").focus(); return false; }
+			if ($('#user_pwd').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập mật khẩu！', 2000); $("#user_pwd").focus(); return false; }
+			if ($('#verify').val()  == '') { MAC.Pop.Msg(300, 20, 'Vui lòng nhập mã xác minh！', 2000); $("#verify").focus(); return false; }
+
+			$.ajax({
+				url: "{:mac_url('user/reg')}",
+				type: "post",
+				dataType: "json",
+				data: $('#fm').serialize(),
+				beforeSend: function () {
+					$("#btn_submit").css("background","#fd6a6a").val("loading...");
+				},
+				success: function (r) {
+					MAC.Pop.Msg(300, 20, r.msg, 2000);
+					if(r.code==1){
+						location.href="{:mac_url('user/login')}";
+					}
+					else{
+						$('#verify_img').click();
+					}
+				},
+				complete: function () {
+					$("#btn_submit").css("background","#fa4646").val("Đăng ký ngay");
+				}
+			});
+
+		});
+
+</script> 
+{include file="user/foot" /}
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>Nạp tiền thẻ cào - Trung tâm thành viên -{$maccms.site_name}</title>
+<meta name="keywords" content="{$maccms.site_keywords}"/>
+<meta name="description" content="{$maccms.site_description}"/>
+{include file="user/include" /}
+</head>
+<body>
+{include file="user/head" /}
+<!-- Trung tâm thành viên -->
+<div id="member" class="fn-clear">
+    {include file="user/left"}
+    <div id="right">
+		<h2>Nạp tiền trực tuyến</h2>
+		<div class="line40" style="padding-bottom:20px;border-bottom:1px solid #eee;">
+			<p><span class="xiang">Điểm còn lại：</span>{$obj.user_points}</p>
+			<p><span class="xiang">Số tiền nạp：</span><input type="text" name="price" value="{$config.min}" class="jifen-input member-input"></p>
+			<p><span class="xiang"></span><input type="button" id="btn_submit_pay" class="jifen2-button search-button" value="Xác nhận"></p>
+			<p class="hui"><span class="xiang">&nbsp;</span><span class="member-input" style="display:inline-block;border:none;line-height: 24px;">Lời nhắc thân thiện: Số tiền nạp tối thiểu là{$config.min}Đồng，1 đồng có thể quy đổi{$config.scale}个Điểm</span></p>
+		</div>
+
+		<div class="line40" style="padding-top:20px;border-bottom:1px solid #eee;">
+			<p style="position:relative;"><span class="xiang">Số thẻ nạp tiền：</span><input type="text" name="card_no" value="" class="jifen-input member-input">
+				{if condition="$GLOBALS['config']['pay']['card']['url'] neq ''"}
+				<a class="reg-verify-btn reg-verify-btn2" target="_blank" href="{$GLOBALS['config']['pay']['card']['url']}">Nhấp để mua mã thẻ</a>
+				{/if}
+			</p>
+			<p><span class="xiang">Mật khẩu nạp tiền：</span><input type="text" name="card_pwd" value="" class="jifen-input member-input"></p>
+			<p><span class="xiang"></span><input type="button" id="btn_submit_card" class="jifen2-button search-button" value="Xác nhận"></p>
+			<p class="hui"><span class="xiang"></span>Lời nhắc thân thiện：Vui lòng đến nền tảng thẻ cào để mua</p>
+		</div>
+    </div>
+</div>
+<script>
+  $("#left li.user-left-buy").addClass('hover');
+	$(".go-back").click(function () {
+		var ref = document.referrer;
+		location.href=ref;
+	});
+
+	$('#btn_submit_pay').click(function(){
+		var that=$(this);
+		var price = $("input[name='price']").val();
+		if(Number(price)<1){
+			return;
+		}
+		if(confirm('Bạn có chắc chắn muốn nạp tiền trực tuyến không')) {
+			$.ajax({
+				url: "{:mac_url('user/buy')}",
+				type: "post",
+				dataType: "json",
+				data: {price: price,flag:'pay'},
+				beforeSend: function () {
+					$("#btn_submit_pay").css("background","#fd6a6a").val("loading...");
+				},
+				success: function (r) {
+					if (r.code == 1) {
+						location.href="{:mac_url('user/pay')}?order_code=" + r.data.order_code;
+					}
+					else{
+						MAC.Pop.Msg(300, 20, r.msg, 2000);
+					}
+				},
+				complete: function () {
+					$("#btn_submit_pay").css("background","#fa4646").val("Gửi đi");
+				}
+			});
+		}
+	});
+
+	$('#btn_submit_card').click(function(){
+		var that=$(this);
+		var no = $('input[name="card_no"]').val();
+		var pwd = $('input[name="card_pwd"]').val();
+		if(no=='' || pwd==''){
+			MAC.Pop.Msg(300, 20, 'Vui lòng nhập số thẻ nạp và mật khẩu', 2000);
+			return;
+		}
+		if(confirm('Bạn có chắc chắn muốn nạp tiền bằng thẻ nạp không?')) {
+			$.ajax({
+				url: "{:mac_url('user/buy')}",
+				type: "post",
+				dataType: "json",
+				data: {card_no: no,card_pwd:pwd,flag:'card'},
+				beforeSend: function () {
+					$("#btn_submit_card").css("background","#fd6a6a").val("loading...");
+				},
+				success: function (r) {
+					MAC.Pop.Msg(300, 20, r.msg, 2000);
+				},
+				complete: function () {
+					$("#btn_submit_card").css("background","#fa4646").val("Gửi đi");
+				}
+			});
+		}
+	});
+</script>
+{include file="user/foot" /}
+</body>
+</html>
